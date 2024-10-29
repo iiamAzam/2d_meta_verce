@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { io } from 'socket.io-client';
+import { useMemo, useEffect, useState, useCallback } from 'react';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const socket = useMemo(() => io('http://localhost:3000'), []);
+
+  const [mesage,setsems]=useState('')
+  
+
+  useEffect(() => {
+
+    socket.on('connect', () => {
+      console.log('Connected to the server!');
+      socket.emit('message', mesage );
+    });
+
+    // Listen for incoming chat messages
+    socket.on('chatmessage', (msg) => {
+      console.log('Received message:', msg);
+    });
+
+    // Handle socket disconnection
+    socket.on('disconnect', () => {
+      console.log('Disconnected from the server.');
+    });
+
+    // Cleanup to prevent memory leaks on unmount
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <h1>React + Socket.IO</h1>
+      <p>Check the console for connection status and messages.</p>
+      <input type='text' value={mesage} onChange={(e)=>setsems(e.target.value)}/>
+    </div>
+  );
 }
 
-export default App
+export default App;
