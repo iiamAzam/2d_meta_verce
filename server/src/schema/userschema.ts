@@ -1,4 +1,12 @@
-import mongoose  from "mongoose";
+import mongoose, {Document} from "mongoose";
+
+interface auth extends Document{
+        name:string,
+        email:string,
+        password:string
+}
+
+
 
 const Schema = mongoose.Schema
 
@@ -18,4 +26,4 @@ const userSchema = new Schema ({
 
 })
 
-export default mongoose.model('user',userSchema)
+export default mongoose.model<auth>('user',userSchema)
