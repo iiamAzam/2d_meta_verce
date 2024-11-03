@@ -53,7 +53,7 @@ class Auth {
                     message:'login successfully'
                 })}
             catch (eror){
-                res.status(500).json({
+                res.status(400).json({
                         status:true,
                         message:'lgin error',
                         error:eror
