@@ -11,11 +11,7 @@ interface auth extends Document{
         avatarId?:string,
         role: Role
 }
-
-
-
 const Schema = mongoose.Schema
-
 const userSchema = new Schema ({
         username:{
             type :String,

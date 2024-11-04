@@ -1,4 +1,7 @@
+import { ref } from "joi";
 import mongoose ,{ Document} from "mongoose";       
+import { spaceModel } from "./spaceSchema";
+import { singleElement } from "./onlyelemt";
 interface elements extends Document{
         elementId:string,
         spaceid:string,
@@ -9,10 +12,12 @@ interface elements extends Document{
 const Schema = mongoose.Schema
 const elementsSchema=new Schema({
      elementid:{
-            type :String ,
+            type:mongoose.Schema.ObjectId,
+            ref:singleElement
      },
      spaceid:{
-        type :  String
+        type :mongoose.Schema.ObjectId,
+        ref:spaceModel
 
      },
      x:{

@@ -1,4 +1,6 @@
 import  mongoose from "mongoose";
+import { mapSchema } from "./mapScheama";
+import { singleElement } from "./onlyelemt";
 interface mapelements extends Document{
        mapId:string,
        elementId: string, 
@@ -9,10 +11,12 @@ interface mapelements extends Document{
 const Schema= mongoose.Schema
 const mapelements=new Schema({
     mapId:{
-        type:String
+        type:mongoose.Schema.ObjectId,
+        ref:mapSchema
     },
     elementId: {
-        type:String
+        type:mongoose.Schema.ObjectId,
+        ref:singleElement
     }, 
     x: {
         type:String

@@ -15,9 +15,6 @@ const singleElementSchema= new Schema ({
         imageUrl:{
                 type : Number 
         }
-
-
-
 })
 
-export const singleelent= mongoose.model<singleelement>('singleElement',singleElementSchema)
+export const singleElement= mongoose.model<singleelement>('singleElement',singleElementSchema)

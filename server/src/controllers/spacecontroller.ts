@@ -1,5 +1,6 @@
 import {Response,Request} from 'express'
 import { spaceModel } from '../schema/spaceSchema'
+import {spacelement} from '../schema/spaceElements'
 
 class Space {
         async createspace(req:Request,res:Response){
@@ -46,7 +47,7 @@ class Space {
                     }   
         }
 
-        async getall(req:Request,res:Response){
+        async getaspace(req:Request,res:Response){
             const spaceId=req.params.spaceId
            try {
             const result = await spaceModel.find({spaceId})
@@ -64,6 +65,47 @@ class Space {
                             error: error
                     })
             }   }
+
+            async getall(req:Request,res:Response){
+                const spaceId=req.params.spaceId
+               try {
+                const result = await spaceModel.find({spaceId})
+                return res.status(200).json (
+                    {
+                        status : true ,
+                        message : result
+                    }
+    
+                )}
+                catch (error){
+                        return res.status (400).json({
+                                status :false,
+                                message : "somthing went wrong ",
+                                error: error
+                        })
+                }   }
+         async createElement(req:Request,res:Response){
+            const {elementid,spaceid,x,y}=req.body
+            try{
+                const newSpace= new spacelement({
+                    elementid,
+                    spaceid,
+                    x,
+                    y
+                })
+                await newSpace.save()
+                return res.status(200).json({
+                    status:true,
+                })
+
+            }catch (eror ){
+                return res.status(400).json({
+                        status:false
+                })
+            }
+            
+         }
+         // need to impliment delete an element 
 
 }
 
