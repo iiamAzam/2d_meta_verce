@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import http from 'http';
 import { Server } from 'socket.io';
 import authrout from './routes/auth_rout'
+import cookieparser from 'cookie-parser'
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -11,6 +12,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"]
   }
 });
+app.use(cookieparser())
 app.use(express.json());
 
 mongoose.connect("mongodb://localhost:27017/3d_space").then(()=>{
@@ -19,6 +21,7 @@ mongoose.connect("mongodb://localhost:27017/3d_space").then(()=>{
         console.log(`somthing went wrong ${error}`)
 })
 
+app.use('/api/v1', authrout)
 
 io.on('connection', (socket) => {
   console.log('A user connected');
@@ -32,7 +35,7 @@ io.on('connection', (socket) => {
     console.log('A user disconnected');
   });
 });
-app.use('/',authrout)
+
 
 
 server.listen(3000, () => {

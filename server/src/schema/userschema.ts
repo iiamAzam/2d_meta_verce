@@ -1,9 +1,15 @@
 import mongoose, {Document} from "mongoose";
 
+enum Role {     
+        Admin="Admin",
+        User="User"
+}
+
 interface auth extends Document{
-        name:string,
-        email:string,
-        password:string
+        username:string,
+        password:string,
+        avatarId?:string,
+        role: Role
 }
 
 
@@ -11,18 +17,22 @@ interface auth extends Document{
 const Schema = mongoose.Schema
 
 const userSchema = new Schema ({
-        name:{
+        username:{
             type :String,
             required: true 
-        },
-        email:{
-            type:String,
-            required:true 
         },
         password: {
                 type:String,
                 require:true
-        }
+        },
+        avatarId:{
+                type:String
+        },
+        role: {
+                type: String,
+                enum: ['Admin', 'User'], 
+                required: true,
+              },
 
 })
 

@@ -1,8 +1,13 @@
 import express from 'express'
-import authController from '../controllers/authrout'
-
+import {userAuthentication} from '../controllers/authcontrollers'
+import {user_route} from './userDatarout'
 const route=express.Router()
-route.post('/register',authController.authRegister)
-route.post ('/login',authController.Login)
+route.post('/signup',userAuthentication.signUp)
+route.post ('/signin',userAuthentication.signIn)
 
+
+
+route.use('/user',user_route)
 export default route
+
+
