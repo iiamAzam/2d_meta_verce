@@ -1,6 +1,5 @@
 import { Response,Request } from "express";
 import  useDb from '../schema/userschema'
-import userschema from "../schema/userschema";
 
 class Usermetadata{
     async updatedata(req:Request,res:Response){
@@ -21,4 +20,4 @@ class Usermetadata{
     }
 }
 
-export const {updatedata}=new Usermetadata()
+export const {updatedata,getalldata}=new Usermetadata()

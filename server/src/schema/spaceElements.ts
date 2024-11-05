@@ -29,4 +29,4 @@ const elementsSchema=new Schema({
      
 })
 
-export const element=mongoose.model<elements>('element',elementsSchema)
+export const spacelement=mongoose.model<elements>('element',elementsSchema)

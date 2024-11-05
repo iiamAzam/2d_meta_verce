@@ -1,4 +1,6 @@
+import { number, string } from "joi";
 import mongoose, { mongo }  from "mongoose";
+import { singleElement } from "./onlyelemt";
 interface map extends Document{
         width : number 
         height : number ,
@@ -15,7 +17,21 @@ const mapScheama = new Schema({
         },
         name  : {
                 type:String
-        }
+        },
+        defaultElements:[
+                {
+                        elementId:{
+                                type:mongoose.Schema.ObjectId,
+                                ref:singleElement
+                        },
+                        x:{
+                                type:Number
+                        },
+                        y: {
+                                type:Number
+                        }
+                }
+        ]
 })
 
 export const mapSchema = mongoose.model<map>('map',mapScheama)

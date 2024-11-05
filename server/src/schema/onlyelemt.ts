@@ -14,7 +14,11 @@ const singleElementSchema= new Schema ({
         },
         imageUrl:{
                 type : Number 
+        },
+        is_static:{
+                type:Boolean
         }
+
 })
 
 export const singleElement= mongoose.model<singleelement>('singleElement',singleElementSchema)

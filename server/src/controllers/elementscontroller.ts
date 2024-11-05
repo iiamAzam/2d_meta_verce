@@ -18,3 +18,5 @@ class Element{
             }
     }
 }
+
+export const element = new Element()

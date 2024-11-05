@@ -1,15 +1,13 @@
 import {Request,Response,NextFunction} from 'express'
-import { extend } from 'joi'
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
-interface typejwt extends JwtPayload{
-       _doc:{
-              role: string
-       }
-
-
+interface typejwt extends jwt.JwtPayload{
+    _doc:{
+           role: string
+    }
 }
-const middlewawre = (req:Request,res:Response,next:NextFunction)=>{
+
+const adminmiddleware = (req:Request,res:Response,next:NextFunction)=>{
             const token =  req.cookies.token||req.body.token
             const secret_key="ok_this_working1234"
             if(!token){
@@ -19,21 +17,22 @@ const middlewawre = (req:Request,res:Response,next:NextFunction)=>{
                      })  
 
             }
-            const decode=jwt.verify(token,secret_key) as typejwt | null
+            const decode=jwt.verify(token,secret_key) as typejwt|null
             if (!decode){
               return res.status(403).json({
                      status:false,
                      message:'unauthorized'
               })
             }
-            console.log(decode._doc.role)
-            if (decode._doc.role!=='User'){
-              return res.status(400).json({
-                     message:'unauthorised'
-              })
+            
+            if (decode._doc.role!=='Admin'){
+                return res.status(400).json({
+                        message:"unauthorised"
+                })
             }
+
+            
             req.body={...req.body,token:decode}
             next()
 }
-
-export default middlewawre
+export default adminmiddleware

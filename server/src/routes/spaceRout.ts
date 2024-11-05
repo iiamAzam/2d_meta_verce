@@ -6,6 +6,5 @@ spaceroute.post('/',middlewawre,space.createspace)
 spaceroute.delete('/:spaceId',middlewawre,space.spaceDelete)
 spaceroute.get('/:all',middlewawre,space.getall)
 spaceroute.get('/:spaceId',middlewawre,space.getaspace)
-
-
+spaceroute.post('/element',middlewawre,space.createElement)
 export default spaceroute
