@@ -13,9 +13,9 @@ class Space {
                return res.status(200).json({
                     status:true,
                     spaceID:spaceid._id
-               })
+             })
 
-
+                
 
             }catch (error){
                 return res.status(400).json({
