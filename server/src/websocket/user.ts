@@ -7,9 +7,7 @@ const getrandomstring=(length:number)=>{
        let result = '' 
        for (let i=0; i<length; i++){
             result = alpha.charAt( Math.random()*alpha.length)
-            return result        
-        
-        
+            return result     
         }
 }
 
@@ -34,7 +32,7 @@ export class User {
           this.Socket.on('connection', async  (data)=>{
                 const {type,spacId,token}=data
                 switch (type){
-                case 'join':
+                    case 'join':
                     const userId = jwt.verify(token,secret_key) as any
                     if (!userId){
                         this.Socket.disconnect()
@@ -50,14 +48,35 @@ export class User {
                     Roommanager.getinstatance().adduser(spacId,this)
                     this.x=Math.floor(Math.random()*isSpaceId?.width)
                     this.y=Math.floor(Math.random()*isSpaceId?.height)
-                    this.Socket.emit('init',
-                        
+                    this.Socket.emit("space-joined",
                         {x:this.x,
                          y:this.y,
                          users:Roommanager.getinstatance().rooms.get(spacId)?.filter(x=>x.id!==this.id)?.map((u)=>({id:u.id}))??[]
                         })
-                        
+                    break    
+
+                    case 'move':
+                        const {x,y}=data
+                        const xdisplacement=Math.abs(this.x - x)
+                        const ydisplacement=Math.abs(this.y-y)
+                        if ((xdisplacement==1&&ydisplacement==0)|| (xdisplacement==0&&ydisplacement==1)){
+                                this.x=x
+                                this.y=y
+                                Roommanager.getinstatance().broadcast(
+                                        {
+                                            x:this.x,
+                                            y:this.y
+                                        },
+                                        this.spaceId,
+                                        this
+                                       
+                                )
+
+                        }
+                           
                 } 
+               
+
 
             
             
