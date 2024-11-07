@@ -24,16 +24,17 @@ export class Roommanager{
             }
             this.rooms.set(spaceId,(this.rooms.get(spaceId)?.filter(u=>u.id!==user.id)??[]))
             return}
-            broadcast (message:string, roomid:string,user:User){
+            broadcast (message:any, roomid:string,user:User){
                     if(this.rooms.has(roomid)){
                         return 
                     }
                     this.rooms.get(roomid)?.forEach((u)=>{
-                            if(u.id!==user.id){
-                            u.send(message)   
-                                                }
+                        if(u.id!==user.id){
+                            u.Socket.send(message)  
+                        }
                     })
-            } 
+                     
+                } 
 
             //debugging hs to be don tommorow
         

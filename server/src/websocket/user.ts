@@ -1,4 +1,5 @@
 import { spaceModel } from "../schema/spaceSchema"
+import { Roommanager } from "./roomManager"
 import jwt from "jsonwebtoken"
 import { Socket } from "socket.io"
 const getrandomstring=(length:number)=>{
@@ -17,18 +18,17 @@ const secret_key="ok_this_working1234"
 export class User {
       public id : string|undefined;
       public userid? : string;
-      private spaceId? : string;
+      public spaceId? : string;
       private x:number;
       private y : number;
-      private send:()=>any
-      private Socket : Socket;
+      public Socket : Socket;
         constructor(Socket:Socket){
            this.id=getrandomstring(10)
            this.x=0;
            this.y=0;
            this.Socket=Socket 
            this.initHndler()
-           this.send()
+     
         } 
       async  initHndler(){
           this.Socket.on('connection', async  (data)=>{
@@ -47,11 +47,21 @@ export class User {
                         return    
                     } 
                     this.spaceId=spacId
-
+                    Roommanager.getinstatance().adduser(spacId,this)
+                    this.x=Math.floor(Math.random()*isSpaceId?.width)
+                    this.y=Math.floor(Math.random()*isSpaceId?.height)
+                    this.Socket.emit('init',
+                        
+                        {x:this.x,
+                         y:this.y,
+                         users:Roommanager.getinstatance().rooms.get(spacId)?.filter(x=>x.id!==this.id)?.map((u)=>({id:u.id}))??[]
+                        })
+                        
                 } 
 
             
             
           })
         }
+
         }
