@@ -36,8 +36,25 @@ describe("authentication", () => {
 });
 
 describe('user meta data and update',()=>{
-        test ('',()=>{
-                
+            let token=''
+            let avatarId=''
+            beforall (async()=>{
+                const username = 'pillu'
+                const password = '7749'
+                const response = await axios.post(`${BACKEND_URL}/api/v1/signin`,{
+                    username,
+                    password
+                })
+                token = response.data.token
+                const avatarResponse= await axios.post(`${BACKEND_URL}/api/v1/admin/avatar`)
+                avatarId=avatarResponse.data.id
+            })
+             
+
+
+
+        test ('user able to ubdate avatar id ',async()=>{
+                           
         })
 })
 
