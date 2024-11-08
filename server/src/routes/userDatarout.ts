@@ -5,3 +5,5 @@ const userroute = Router();
 userroute.post('/metadata', middleware,updatedata);
 userroute.get('/metadata/bulk',middleware,getalldata)
 export const user_route = userroute;
+
+

@@ -32,8 +32,11 @@ io.on('connection', (socket) => {
     console.log('A user disconnected');
   });
 });
-
-
+app.get('/',(req,res)=>{
+              res.status(200).json({
+                  message : "iam working proparly"
+              })
+})
 
 server.listen(3000, () => {
   console.log('Socket.IO server running at http://localhost:3000');

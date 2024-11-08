@@ -1,3 +1,4 @@
+import { string } from "joi";
 import mongoose from "mongoose";
 interface singleelement extends Document{
         width: number ,
@@ -13,7 +14,7 @@ const singleElementSchema= new Schema ({
                 type : Number
         },
         imageUrl:{
-                type : Number 
+                type : String
         },
         is_static:{
                 type:Boolean

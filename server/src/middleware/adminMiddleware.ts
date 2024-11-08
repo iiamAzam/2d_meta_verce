@@ -8,7 +8,8 @@ interface typejwt extends jwt.JwtPayload{
 }
 
 const adminmiddleware = (req:Request,res:Response,next:NextFunction)=>{
-            const token =  req.cookies.token||req.body.token
+            const token =  req.headers["authorization"]?.split(' ')[1]
+       
             const secret_key="ok_this_working1234"
             if(!token){
                      return res.status(403).json({
@@ -32,7 +33,7 @@ const adminmiddleware = (req:Request,res:Response,next:NextFunction)=>{
             }
 
             
-            req.body={...req.body,token:decode}
+            req.body={...req.body,decode}
             next()
 }
 export default adminmiddleware

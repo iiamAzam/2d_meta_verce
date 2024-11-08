@@ -23,7 +23,7 @@ class Auth {
         const userId= await new_user.save()
         return res.status(200).json({
             status:true,
-            userId:userId
+            userId:userId._id
         })
     }catch(error){
             return res.status(400).json({

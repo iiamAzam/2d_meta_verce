@@ -10,7 +10,8 @@ interface typejwt extends JwtPayload{
 
 }
 const middlewawre = (req:Request,res:Response,next:NextFunction)=>{
-            const token =  req.cookies.token||req.body.token
+            const token =  req.headers['authorization']?.split(' ')[1]
+            console.log(token)
             const secret_key="ok_this_working1234"
             if(!token){
                      return res.status(403).json({
