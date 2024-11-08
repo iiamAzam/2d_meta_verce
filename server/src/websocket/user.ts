@@ -1,6 +1,6 @@
 import { spaceModel } from "../schema/spaceSchema"
 import { Roommanager } from "./roomManager"
-import jwt from "jsonwebtoken"
+import jwt, { JsonWebTokenError } from "jsonwebtoken"
 import { Socket } from "socket.io"
 const getrandomstring=(length:number)=>{
        const alpha= 'ABCDEFGHIJKLMNOPQRSTUVWX' 
@@ -10,8 +10,6 @@ const getrandomstring=(length:number)=>{
             return result     
         }
 }
-
-
 const secret_key="ok_this_working1234"
 export class User {
       public id : string|undefined;
@@ -28,7 +26,7 @@ export class User {
            this.initHndler()
      
         } 
-      async  initHndler(){
+        initHndler(){
           this.Socket.on('connection', async  (data)=>{
                 const {type,spacId,token}=data
                 switch (type){
@@ -71,16 +69,38 @@ export class User {
                                         this
                                        
                                 )
-
+                                return
                         }
-                           
-                } 
-               
 
-
-            
-            
-          })
+                        this.Socket.send(
+                            {
+                                type:"movement-rejected",
+                                x:this.x,
+                                y:this.y
+                            }
+                        )
+                    }
+                }
+            )
         }
+        distroy(){
+            Roommanager.getinstatance().broadcast(
+                
+                { type:'user-left',
+                    payload:{
+                        userId:this.userid
+                    }},
+                    this.spaceId,
+                    this)
+                    Roommanager.getinstatance().removeuser(
+                        this,
+                        this.spaceId
+                    )
 
         }
+        send(payload:any){
+            this.Socket.send(payload)
+        }
+    }
+
+  

@@ -18,13 +18,13 @@ export class Roommanager{
                     return
                 }
         }
-        removeuser(user:User,spaceId:string){
+        removeuser(user:User,spaceId:any){
             if(!this.rooms.has(spaceId)){
                 return
             }
             this.rooms.set(spaceId,(this.rooms.get(spaceId)?.filter(u=>u.id!==user.id)??[]))
             return}
-            broadcast (message:any, roomid:string,user:User){
+            broadcast (message:any, roomid:any,user:User){
                     if(this.rooms.has(roomid)){
                         return 
                     }
@@ -35,11 +35,6 @@ export class Roommanager{
                     })
                      
                 } 
-
-           
-        
-        
-        
      }
 
 
