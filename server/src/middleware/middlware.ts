@@ -1,5 +1,4 @@
 import {Request,Response,NextFunction} from 'express'
-import { extend } from 'joi'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
 interface typejwt extends JwtPayload{
@@ -22,14 +21,14 @@ const middlewawre = (req:Request,res:Response,next:NextFunction)=>{
             }
             const decode=jwt.verify(token,secret_key) as typejwt | null
             if (!decode){
-              return res.status(403).json({
+              return res.status(401).json({
                      status:false,
                      message:'unauthorized'
               })
             }
             console.log(decode._doc.role)
             if (decode._doc.role!=='User'){
-              return res.status(400).json({
+              return res.status(401).json({
                      message:'unauthorised'
               })
             }

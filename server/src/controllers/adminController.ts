@@ -89,11 +89,12 @@ class Admin {
     }
 
       async creatMap(req:Request,res:Response){
-            const {width,height,name,defaultElements} = req.body
+            const {dimention,name,defaultElements} = req.body
             try {
+                
                 const newMap = new mapSchema({
-                    width,
-                    height,
+                    width:parseInt(dimention.split('x')[0]),
+                    height:parseInt(dimention.split('x')[1]),
                     name,
                     defaultElements
                 })

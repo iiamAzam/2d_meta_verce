@@ -10,7 +10,7 @@ class Auth {
         try{
         const exist:string|null = await userDb.findOne({username})
         if(exist){
-            return res.status(400).json({
+            return res.status(409).json({
                     message:'user already exist'
             })
         }
@@ -22,7 +22,6 @@ class Auth {
         })
         const userId= await new_user.save()
         return res.status(200).json({
-            status:true,
             userId:userId._id
         })
     }catch(error){
@@ -54,8 +53,7 @@ class Auth {
         const option:SignOptions={expiresIn:'24h'}
         const token = jwt.sign({...check},secreat_key,option)
         return res.status(200).json({
-                status:true,
-                message:'userloged in successfully',
+                userId : check._id,
                 token
         })
     }       
