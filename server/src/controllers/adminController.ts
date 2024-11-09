@@ -49,9 +49,7 @@ class Admin {
                     name
                 }) 
                 const avatarid =await newAvatar.save()
-                return res.status(200).json({
-                        status:true,
-                        message:"the avatar is created successfully" ,  
+                return res.status(200).json({ 
                         avatarid
                 })
             }catch(error){
@@ -89,10 +87,11 @@ class Admin {
     }
 
       async creatMap(req:Request,res:Response){
-            const {dimention,name,defaultElements} = req.body
+            const { thumbnail,dimention,name,defaultElements} = req.body
             try {
                 
                 const newMap = new mapSchema({
+                    thumbnail,
                     width:parseInt(dimention.split('x')[0]),
                     height:parseInt(dimention.split('x')[1]),
                     name,
@@ -100,7 +99,7 @@ class Admin {
                 })
                 const mapId=await newMap.save()
                 return res.status(200).json({
-                    mapId
+                    mapId:mapId._id
                 })
 
             }catch(error){

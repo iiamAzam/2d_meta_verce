@@ -10,7 +10,7 @@ class Usermetadata{
             if(!findandupdat){
                 return res.status(400).json({
                     status:false,
-                    message:"ok this is not working"
+                    message:"avatarid not exist"
                 })
             }
             res.status(200).json({

@@ -14,14 +14,10 @@ const spacesSchema= new Schema({
         name: {
             type:String,
         },
-        width:{
-            type :String,
+        dimensions:{
+            type:String
         },
-        height:{
-            type : String 
-
-        },
-        thumnail:{
+        mapId:{
             type:String
         }
 })

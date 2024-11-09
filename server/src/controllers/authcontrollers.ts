@@ -37,14 +37,14 @@ class Auth {
         const {username, password} = req.body
             const check = await userDb.findOne({username})
             if(!check){
-                return res.status(400).json({
+                return res.status(401).json({
                     status: false,
                     message: "user not exist"
                 })
             }
         const  ispasswordvalid = await bcrypt.compare(password,check.password)
            if (!ispasswordvalid){
-            return res.status(400).json({
+            return res.status(401).json({
                 status : false ,
                 message : 'username or password invalid '
             })

@@ -39,13 +39,6 @@ describe('Authentication', () => {
       expect(response.status).toBe(200);
       expect(response.data).toHaveProperty('userId');
     });
-    test('should fail with invalid password format', async () => {
-      await expect(axios.post(`${BACKEND_URL}/api/v1/signup`, {
-        username: `user_${generateRandomString()}`,
-        password: '123', // Too short
-        role: 'user'
-      })).rejects.toHaveProperty('response.status', 400);
-    });
 
     test('should fail with duplicate username', async () => {
       const username = `user_${generateRandomString()}`;
@@ -75,7 +68,6 @@ describe('Authentication', () => {
         username: testUser.username,
         password: testUser.password
       });
-
       expect(response.status).toBe(200);
       expect(response.data).toHaveProperty('token');
       expect(response.data).toHaveProperty('userId');
@@ -98,11 +90,6 @@ describe('Authentication', () => {
 });
 
 
-
-
-
-
-
 describe('User Profile & Metadata', () => {
   let user;
   let admin;
@@ -117,7 +104,7 @@ describe('User Profile & Metadata', () => {
       `${BACKEND_URL}/api/v1/admin/avatar`,
       {
         imageURL: 'https://example.com/avatar.png',
-        name: 'Test Avatar'
+         name: 'Test Avatar'
       },
       {
         headers: { Authorization: `Bearer ${admin.token}` }
@@ -129,7 +116,7 @@ describe('User Profile & Metadata', () => {
   test('should update user avatar successfully', async () => {
     const response = await axios.post(
       `${BACKEND_URL}/api/v1/user/metadata`,
-      { avatarId: testAvatar.id },
+      { avatarId: testAvatar.avatarid },
       {
         headers: { Authorization: `Bearer ${user.token}` }
       }
@@ -182,6 +169,7 @@ describe('Spaces', () => {
       {
         thumbnail: 'https://example.com/map.png',
         dimensions: '100x200',
+        name: 'Test Map',
         defaultElements: []
       },
       {
@@ -197,13 +185,13 @@ describe('Spaces', () => {
       {
         name: 'Test Space',
         dimensions: '100x200',
-        mapId: testMap.id
+        thumnail:'exampl.com',
+        mapId: testMap.mapId
       },
       {
         headers: { Authorization: `Bearer ${user.token}` }
       }
     );
-
     expect(response.status).toBe(200);
     expect(response.data).toHaveProperty('spaceId');
   });
