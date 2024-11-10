@@ -10,11 +10,10 @@ interface typejwt extends JwtPayload{
 }
 const middlewawre = (req:Request,res:Response,next:NextFunction)=>{
             const token =  req.headers['authorization']?.split(' ')[1]
-            console.log(token)
             const secret_key="ok_this_working1234"
             if(!token){
                      return res.status(403).json({
-                            status : false,
+                      status : false,
                             message: 'token not found'   
                      })  
 
@@ -26,7 +25,7 @@ const middlewawre = (req:Request,res:Response,next:NextFunction)=>{
                      message:'unauthorized'
               })
             }
-            console.log(decode._doc.role)
+            console
             if (decode._doc.role!=='User'){
               return res.status(401).json({
                      message:'unauthorised'

@@ -1,18 +1,16 @@
 import { Response,Request } from "express";
 import  useDb from '../schema/userschema'
-import { stat } from "fs";
+import { avatar } from "../schema/avatarschema";
 
 class Usermetadata{
     async updatedata(req:Request,res:Response){
             const {avatarId,token}=req.body
             const id=token. _doc._id
-            const findandupdat = await useDb.findByIdAndUpdate(id,{$set:{avatarId:avatarId}}, { new:true, fields:{ avatarId: 1 }})
-            if(!findandupdat){
-                return res.status(400).json({
-                    status:false,
-                    message:"avatarid not exist"
-                })
+            const isavatarexist=await avatar.findOne({avatarId})
+            if (!isavatarexist){
+                return res.status(400).json({message:"Avatar not found"})
             }
+            const findandupdat = await useDb.findByIdAndUpdate(id,{$set:{avatarId:avatarId}}, { new:true, fields:{ avatarId: 1 }})
             res.status(200).json({
                 findandupdat
             })

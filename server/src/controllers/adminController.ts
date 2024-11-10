@@ -17,7 +17,7 @@ class Admin {
          res.status(200).json({
             status:true,
             message:'element created successfully',
-            id
+            id:id._id
          })
         }catch (error){
             return res.status(400).json({
@@ -50,7 +50,7 @@ class Admin {
                 }) 
                 const avatarid =await newAvatar.save()
                 return res.status(200).json({ 
-                        avatarid
+                        avatarid:avatarid._id
                 })
             }catch(error){
                 return res.status(400).json({

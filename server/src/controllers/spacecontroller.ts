@@ -71,10 +71,10 @@ class Space {
 
             async getall(req:Request,res:Response){
                try {
-                const result = await spaceModel.find()
+                const spaces = await spaceModel.find()
                 return res.status(200).json (
                     {
-                         result
+                         spaces
                     }
     
                 )}

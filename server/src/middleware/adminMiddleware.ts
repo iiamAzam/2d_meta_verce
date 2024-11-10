@@ -27,7 +27,7 @@ const adminmiddleware = (req:Request,res:Response,next:NextFunction)=>{
             }
             
             if (decode._doc.role!=='Admin'){
-                return res.status(400).json({
+                return res.status(403).json({
                         message:"unauthorised"
                 })
             }

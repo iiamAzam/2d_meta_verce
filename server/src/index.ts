@@ -24,7 +24,9 @@ app.use(cookieparser())
 app.use(express.json());
 
 
-mongoose.connect("mongodb://localhost:27017/3d_space").then(()=>{
+// mongodb://localhost:27017/ecommerce
+// "mongodb://localhost:27017/3d_space"
+mongoose.connect("mongodb://localhost:27017/ecommerce").then(()=>{
         console.log('the db is connected')
 }).catch((error)=>{
         console.log(`somthing went wrong ${error}`)
