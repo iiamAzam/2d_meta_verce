@@ -1,7 +1,9 @@
 const axios2 = require("axios");
-const exp = require("constants");
 const mongoose = require('mongoose');
 const { describe } = require("node:test");
+const {io} = require('socket.io-client')
+
+
 const axios = {
     post: async (...args) => {
         try {
@@ -402,6 +404,94 @@ describe('Admin Operations', () => {
   });
 });
 
-describe(()=>{
-    
+describe('socket connection operations', () => {
+            let user;
+            let admin;
+            let testMap;
+            let spaceId;
+            let socket1;
+            let socket2;
+            let userx;
+            let usery;
+            let adminx;
+            let admindy;
+
+
+
+            beforeAll(async () => {
+            user = await setupTestUser('User');
+            admin = await setupTestUser('Admin');
+            const mapResponse = await axios.post(
+              `${BACKEND_URL}/api/v1/admin/map`,
+              {
+                thumbnail: 'https://example.com/map.png',
+                dimensions: '100x200',
+                name: 'Test Map',
+                defaultElements: []
+              },
+              {
+                headers: { Authorization: `Bearer ${admin.token}` }
+              }
+            );
+            testMap = mapResponse.data;
+            const response = await axios.post(
+              `${BACKEND_URL}/api/v1/space`,
+              {
+                name: 'Test Space',
+                dimensions: '100x200',
+                thumnail:'exampl.com',
+                mapId: testMap.mapId
+              },
+              {
+                headers: { Authorization: `Bearer ${user.token}` }
+              }
+            );
+            spaceId = response.data.spaceId;
+
+             socket1=io(BACKEND_URL)
+             socket2=io(BACKEND_URL)
+             socket1.on('connect', () => {
+              console.log('Client connected:');
+             
+            });
+            socket2.on('connect', () => {
+              console.log('Client connected:');
+            
+            });
+
+          });
+         
+          test('join',async()=>{
+            socket1.emit('connection',{
+                 type :"join",
+                 spacId :spaceId,
+                 token: user.token 
+              })
+              expect(true).toBe(true);
+              socket1.on("spacejoined",(data)=>{
+                    const {x,y,users}=data
+                    userx=x
+                    usery=y
+                console.log('ok this is working')
+                console.log(userx,usery,users)
+                expect(true).toBe(true);
+              })
+             socket2.emit('connection',{
+                type :"join",
+                 spacId :spaceId,
+                  token: admin.token
+              })
+             socket2.on("spacejoined",(data)=>{
+                   const {x,y}=data
+                    adminx=x
+                    admindy=y
+                    console.log(x,y)
+                    expect(true).toBe(true);
+              })
+        
+          })
+
+
+
+  
 })

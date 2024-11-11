@@ -1,4 +1,3 @@
-import { ref } from "joi";
 import mongoose ,{ Document} from "mongoose";       
 import { spaceModel } from "./spaceSchema";
 import { singleElement } from "./onlyelemt";
@@ -8,6 +7,7 @@ interface elements extends Document{
         x:number,
         y:number
 }
+
 
 const Schema = mongoose.Schema
 const elementsSchema=new Schema({

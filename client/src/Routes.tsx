@@ -1,14 +1,17 @@
 import {Routes, Route} from 'react-router-dom'
 import App from './App'
-import { SignUpForm } from './pages/Signup_Signin'
+import { SignUpForm,SignInForm } from './pages/Signup_Signin'
+import UserData from './pages/userData'
+
 
 function Routesprovider() {
   return (
           <Routes>
-            <Route path='/' element={<App/>}>
+            <Route path='/' element={<App/>}/>
             <Route path='/signup' element={<SignUpForm/>}/>
-            <Route path='/signin' element={<SignUpForm/>}/>
-            </Route>
+            <Route path='/signin' element={<SignInForm/>}/>
+            <Route path='/user' element = {<UserData/>}/>
+          
           </Routes>
   )
 }
