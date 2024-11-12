@@ -1,8 +1,11 @@
 import React from 'react'
+interface textSize{
+    size:string
+}
 
-function Header() {
+const Header:React.FC<textSize> = ({size:textSize})=> {
   return (
-    <div className='flex  text-[23px]  gap-5'>
+    <div className={`flex  text-[${textSize}]  gap-5`}>
                 <h1>
                     Metaverce
                 </h1>
