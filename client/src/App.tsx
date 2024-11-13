@@ -2,40 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { motion, useScroll, Variants, useMotionValue, AnimatePresence } from 'framer-motion';
 import Button from './components/button';
 import { Card, CardHeader, CardTitle, CardContent } from './components/button';
-import MapSection from './components/map';
+import image  from  './assets/6617063.jpg'
+import image1  from './assets/6591922.jpg'
+import image2 from './assets/6651058.jpg'
 import { useNavigate } from 'react-router-dom';
 interface Feature {
   title: string;
   description: string;
 }
-
-type Avatar = {
-  src: string;
-  alt: string;
-  position: { top: string,  left: string } | { bottom: string,  right: string }
-  bgColor: string;}
-
-const avatars:Avatar[] = [
-  {
-    src: 'https://ui-avatars.com/api/?name=John+Doe&background=0D8ABC&color=fff',
-    alt: 'Avatar 1',
-    position: { top: '20%', left: '30%' },
-    bgColor: 'rgba(255, 99, 132, 0.6)',
-  },
-  {
-    src: 'https://ui-avatars.com/api/?name=Jane+Smith&background=FF5733&color=fff',
-    alt: 'Avatar 2',
-    position: { bottom: '10%', right: '40%' },
-    bgColor: 'rgba(54, 162, 235, 0.6)',
-  },
-  {
-    src: 'https://ui-avatars.com/api/?name=Alex+Johnson&background=28A745&color=fff',
-    alt: 'Avatar 3',
-    position: { top: '50%', left: '60%' },
-    bgColor: 'rgba(75, 192, 192, 0.6)',
-  },
-];
-
 
 const avatarStyle:string = "w-12 h-12 rounded-full border-4 border-gray-200";
 
@@ -85,9 +59,9 @@ const MetaverseLandingPage: React.FC = () => {
     style={{
       backgroundImage: 'radial-gradient(circle, #c33764, #1d2671)',
     }}
-    >   <div className='mx-4 mt-5 text-[10px]'>
-      
-    </div>
+    >  
+    
+    
 
     <AnimatePresence
       initial={false}
@@ -106,16 +80,53 @@ const MetaverseLandingPage: React.FC = () => {
           <li>Contact</li>
         </ul>
       </motion.div>
+       
       </AnimatePresence>
       {/* Hero Section */}
       <motion.div
-        className="h-screen flex  items-center flex-col justify-center text-white text-center bg-[length:200%_200%]"
+        className="h-screen flex  relative items-center flex-col justify-center text-white text-center bg-[length:200%_200%]"
+        initial={{y:"-100vh"}}
+        animate={{y:0}}
+        transition={{type:"spring",stiffness:50,damping:20}}
+      >
         
-
-        initial="hidden "
+        <motion.div className='mx-4 mt-5 text-[10px] left-6  absolute'
+        initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-      >
+        
+        >
+          <motion.img src={image} className='w-[150px] rounded-full'
+            alt='animated imag'
+            initial={{x:"-100vw"}}
+            animate={{x:80,y:100}}
+            transition={{type:"spring",stiffness:50,damping:20}}
+          />
+          <motion.img src={image1} className='w-[150px] rounded-full'
+            alt='animated imag'
+            initial={{x:"-100vw"}}
+            animate={{x:80,y:170}}
+            transition={{type:"spring",stiffness:50,damping:20}}
+          />
+           <motion.img src={image2} className='w-[150px] h-[150px] object-cover rounded-full'
+            alt='animated imag'
+            initial={{x:"100vw"}}
+            animate={{x:800,y:-200}}
+            
+            transition={{type:"spring",stiffness:50,damping:20}}
+          />
+           <motion.img src={image} className='w-[150px] h-[150px] object-cover rounded-full'
+            alt='animated imag'
+            initial={{x:"100vw"}}
+            animate={{x:800,y:-120}}
+            
+            transition={{type:"spring",stiffness:50,damping:20}}
+          />
+         
+          </motion.div>
+        
+
+
         <h1 className="text-5xl font-bold mb-4">Welcome to Metaverse</h1>
         <p className="text-xl mb-8">Explore the boundless possibilities of the digital realm.</p>
         <Button onClick={()=>navigate('/signup')} className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-6 py-3 rounded-md">
@@ -143,20 +154,7 @@ const MetaverseLandingPage: React.FC = () => {
         </div>
       </div>
 
-      <div>
-            {
-              avatars.map((avatar, index) => (
-                <MapSection>
-                key={index}
-                src= {avatar.src}
-                alt= {avatar.alt}
-                position= {avatar.position}
-                bgColor= { 'bg-[#2563EB]'}
-                </MapSection>
-              )
-              )
-            }
-      </div>
+     
 
       {/* Call to Action Section */}
       <div className="py-12 bg-gradient-to-b from-[#161B22]/30 to-[#0D1117]/30 backdrop-blur-xl">
