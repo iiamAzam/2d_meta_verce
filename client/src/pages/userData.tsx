@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Header from '../components/Header'
 import Avatars from '../components/avatars'
 // hd4hT16SnNLbJICtGGEfYGLU5upU3a5D48v7dxSsUBth33rIkyclpvbx
-
+import image1 from '../assets/6480593.jpg'
 
 const imagearr:string[]=[
     "https://images.pexels.com/photos/28890345/pexels-photo-28890345/free-photo-of-casual-portrait-of-woman-with-braided-hair.jpeg?auto=compress&cs=tinysrgb&w=400&lazy=load",
@@ -29,6 +29,14 @@ function UserData() {
         <Header/>
             </div>
                 <div className=''>
+                    <div>
+                        <img 
+                         src={image1}
+                         className='w-[550px] float-end'
+                        
+                        />
+                        
+                    </div>
                     <h1 className='text-[25px] mb-2'>
                             Profile Setting
                     </h1>
@@ -38,7 +46,7 @@ function UserData() {
                  
             </div>
             
-            <div className='text-[20px] w-[500px] '>
+            <div className='text-[20px] w-[450px] '>
                  <div className=''>
                     <h2 className='mb-3'>
                         Select the avatar

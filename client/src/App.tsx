@@ -74,7 +74,7 @@ const MetaverseLandingPage: React.FC = () => {
        
       
       >
-        <ul className='flex gap-10 cursor-pointer px-10'>
+        <ul className='flex gap-10 mt-5 cursor-pointer px-10'>
           <li>Home</li>
           <li>About</li>
           <li>Contact</li>
