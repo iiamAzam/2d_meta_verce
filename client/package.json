@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "'": "file:../../../../../../components/ui/button'",
+    "@pixi/react": "^7.1.2",
     "@types/react-simple-maps": "^3.0.6",
     "@types/socket.io-client": "^3.0.0",
     "framer-motion": "^11.11.11",
     "lucide-react": "^0.456.0",
+    "pixi.js": "^7.4.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@types/pixi.js": "^5.0.0",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
