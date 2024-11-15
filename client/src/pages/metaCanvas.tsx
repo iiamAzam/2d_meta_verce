@@ -1,89 +1,86 @@
 
-import { useMemo } from 'react';
-
-import { BlurFilter, TextStyle } from 'pixi.js';
-import { Stage, Container,  Text ,TilingSprite, Sprite } from '@pixi/react';
+import { Stage, Container, Sprite } from '@pixi/react';
 import  image  from '../assets/school/grass.jpg';
-import image1 from '../assets/school/PineTools.com_files/almira.png'
 import image3 from '../assets/school/PineTools.com_files/border.png'
-import image4 from '../assets/school/PineTools.com_files/board.png'
+import image5 from '../assets/school/PineTools.com_files/almira.png'
+import image6 from '../assets/school/PineTools.com_files/window.png'
+import image7 from '../assets/school/PineTools.com_files/talbes2.png'
+import image8 from '../assets/school/PineTools.com_files/chair2 .png'
+import image9 from '../assets/school/PineTools.com_files/library.png'
+import image10 from '../assets/school/PineTools.com_files/board.png'
+import image11 from '../assets/school/PineTools.com_files/chaird.png'
+import Charecter from '../components/Charecter';
+type tileType=0|1|2|3|4|5|6|7|8|9
+type ClassroomLayout=tileType[][]
+interface Tilemap{
+  [key:number]:string;
+}
+const tileMappings:Tilemap={
+  0:image,     //Floor   <this are for remembering>
+  1:image3 ,    //Wall (top/bottom) 
+  2:image3,     //Wall (top/bottom)
+  3:image5,     //Door
+  4:image6,     // window
+  5:image7,     //Desk
+  6:image8,     //chair
+  7:image9,     //Bookshelf
+  8:image10,    //whiteboard
+  9:image11     //chair_green
+}
+const TILE_SIZE : number = 32
+const classroomLayout: ClassroomLayout = [
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [2, 0, 4, 4, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 4, 4, 0, 0, 2],
+  [2, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 2],
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+  [2, 0, 5, 0, 5, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 2],
+  [2, 0, 6, 0, 6, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 2],
+  [2, 0, 5, 0, 5, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 2],
+  [2, 0, 6, 0, 6, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 2],
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+  [2, 0, 7, 0, 7, 0, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 2],
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+  [1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [2, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2],
+  [2, 0, 0, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 1, 0, 0, 5, 0, 0, 2],
+  [2, 0, 0, 6, 6, 6, 6, 6, 6, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 2],
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  
+];
+
+
+
 
 const MetaCanvas: React.FC = () => {
-  const blurFilter = useMemo(() => new BlurFilter(2), []);
-  const bunnyUrl = 'https://pixijs.io/pixi-react/img/bunny.png';
-  return (
-    <div className='flex justify-center mt-5 items-center'>
-    <Stage width={1000} height={500} options={{ background: 0x1099bb }}>
-      {/* <Sprite image={bunnyUrl} x={300} y={150} />
-      <Sprite image={bunnyUrl} x={500} y={150} />
-      <Sprite image={bunnyUrl} x={400} y={200} /> */}
-      <TilingSprite
-        image={image}
-        width={1000}
-        height={600}
-        tilePosition={{ x: 250, y: 300 }}
-        tileScale={{ x: 1, y: 1 }}
-        />
-        <TilingSprite
-        image={image3}
-        width={1000}
-        height={20}
-        tilePosition={{ x: 0, y: 0 }}
-        tileScale={{ x: 1, y: 1 }}
-        />
-        <TilingSprite
-        image={image3}
-        width={1000}
-        height={20}
-        tilePosition={{ x: 0, y: 1000 }}
-        tileScale={{ x: 1, y: 2 }}
-        x={920}
-        y={500}
-        />
-        <Sprite
-            image={image1}
-            width={50}
-            height={50}
-            x={200}
-            y={200}
-        />
-        <Sprite
-            image={image4}
-            width={100}
-            height={50}
-            x={450}
-            y={50}
-        />
+        return (
+          <Stage  width={TILE_SIZE * 35} height={TILE_SIZE * 18} options={{ backgroundColor: 0xe8f0f2 }}>
+            <Container 
+                x={250}
+                y={0}
+            > 
+                  {classroomLayout.map((row, rowIndex) =>
+                    row.map((tile, colIndex) => {
+                      const tileTexture = tileMappings[tile];
+                      return (
+                        <Sprite
+                          key={`${rowIndex}-${colIndex}`}
+                          image={tileTexture}
+                          x={colIndex * TILE_SIZE}
+                          y={rowIndex * TILE_SIZE}
+                          width={TILE_SIZE}
+                          height={TILE_SIZE}
+                        />
+                      );
+                    })
+                  )}
 
-       
-      <Container x={200} y={200}>
-      
+            <Charecter initialPosition={{ x: 300, y: 200 }} />
+            </Container>
+          </Stage>
 
 
-        {/* <Text
-          text="Hello World"
-          anchor={0.5}
-          x={220}
-          y={150}
-          filters={[blurFilter]}
-          style={
-            new TextStyle({
-              align: 'center',
-              fill: '0xffffff',
-              fontSize: 50,
-              letterSpacing: 20,
-              dropShadow: true,
-              dropShadowColor: '#E72264',
-              dropShadowDistance: 6,
-            })
-          }
-        /> */}
-
-
-      </Container>
-    </Stage>
-    </div>
-  );
+        )
 };
 
 export default MetaCanvas;
