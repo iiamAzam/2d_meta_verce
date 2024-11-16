@@ -27,8 +27,8 @@ const tileMappings:Tilemap={
   8:image10,    //whiteboard
   9:image11     //chair_green
 }
-const TILE_SIZE : number = 32
-const classroomLayout: ClassroomLayout = [
+export const TILE_SIZE : number = 32
+export const classroomLayout: ClassroomLayout = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [2, 0, 4, 4, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 4, 4, 0, 0, 2],
   [2, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 2],
@@ -74,7 +74,7 @@ const MetaCanvas: React.FC = () => {
                       );
                     })
                   )}
-
+          
             <Charecter initialPosition={{ x: 300, y: 200 }} />
             </Container>
           </Stage>

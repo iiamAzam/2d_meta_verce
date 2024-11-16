@@ -116,7 +116,21 @@
 
 import React, { useEffect, useState } from 'react';
 import { Sprite, useTick } from '@pixi/react';
-import * as PIXI from 'pixi.js';
+import image1 from '../assets/school/charecters/comming.png'
+import image2 from '../assets/school/charecters/comming21.png'
+import image3 from  '../assets/school/charecters/coming2.png'
+import image4 from  '../assets/school/charecters/up1.png'
+import image5 from '../assets/school/charecters/up2.png'
+import image6 from '../assets/school/charecters/up3.png'
+import image7 from '../assets/school/charecters/left1.png'
+import image8 from  '../assets/school/charecters/left2.png'
+import image9 from  '../assets/school/charecters/left3.png'
+import image10 from  '../assets/school/charecters/right1.png'
+import image11 from  '../assets/school/charecters/right2.png'
+import image12 from '../assets/school/charecters/right3.png'
+import { classroomLayout,TILE_SIZE } from '../pages/metaCanvas';
+
+
 
 interface CharacterPosition {
   initialPosition: { x: number; y: number };
@@ -131,53 +145,63 @@ const Character: React.FC<CharacterPosition> = ({ initialPosition }) => {
   // Load character textures
   const textures = {
             down: [
-                PIXI.Texture.from('../assets/school/charecters/comming.png'),
-                PIXI.Texture.from('../assets/school/charecters/coming21.png'),
-                PIXI.Texture.from('../assets/school/charecters/coming2.png'),
+               image1,image2,image3
             ],
             up:[
-                PIXI.Texture.from('../assets/school/charecters/up1.png'),
-                PIXI.Texture.from('../assets/school/charecters/up2.png'),
-                PIXI.Texture.from('../assets/school/charecters/up3.png')
+                image4,image5,image6
             ],
             left :[
-                PIXI.Texture.from('../assets/school/charecters/left1.png'),
-                PIXI.Texture.from('../assets/school/charecters/left2.png'),
-                PIXI.Texture.from('../assets/school/charecters/left3.png')
+                image7,image8,image9
             ],
             right:[
-                PIXI.Texture.from('../assets/school/charecters/right1.png'),
-                PIXI.Texture.from('../assets/school/charecters/right2.png'),
-                PIXI.Texture.from('../assets/school/charecters/right3.png')
+                image10,image11,image12
             ],  
         } 
 
+      const notsolid=(x:number , y:number)=>{
+              const row = Math.floor(y/TILE_SIZE)
+              const col= Math.floor(x/TILE_SIZE)
+              if(row>=0&&row<classroomLayout.length && col>=0&&col<classroomLayout[0].length){
+                const tile = classroomLayout[row][col]
+                  return tile===1||tile===2||tile===7||tile===5
+                }
+             return false
+      }
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      e.preventDefault();
       setMoving(true);
-      setPosition((prevPos) => {
-        const speed = 5;
-        switch (e.key) {
-          case 'ArrowUp':
-          case 'w':
-            setDirection('up');
-            return { ...prevPos, y: prevPos.y - speed };
-          case 'ArrowDown':
-          case 's':
-            setDirection('down');
-            return { ...prevPos, y: prevPos.y + speed };
-          case 'ArrowLeft':
-          case 'a':
-            setDirection('left');
-            return { ...prevPos, x: prevPos.x - speed };
-          case 'ArrowRight':
-          case 'd':
-            setDirection('right');
-            return { ...prevPos, x: prevPos.x + speed };
-          default:
-            return prevPos;
-        }
-      });
+      const speed = 5 
+      let newpositon = {...position}
+      switch (e.key){
+        case 'ArrowUp':
+        case 'w':
+        setDirection('up');
+        newpositon={x:position.x, y: position.y - speed}
+        
+        break;
+        case 'ArrowDown':
+        case 's':
+        setDirection('down');
+        newpositon={x:position.x,y:position.y+speed}
+        break;
+        case 'ArrowLeft':
+        case 'a':
+        setDirection('left');
+        newpositon = { x: position.x - speed, y: position.y };
+        break;
+        case 'ArrowRight':
+        case 'd':
+        setDirection('right');
+        newpositon = { x: position.x + speed, y: position.y };
+        break;
+      default:
+        break
+      } 
+      if(!notsolid(newpositon.x,newpositon.y)){
+            setPosition(newpositon)
+      } 
     };
 
     const handleKeyUp = () => {
@@ -192,7 +216,7 @@ const Character: React.FC<CharacterPosition> = ({ initialPosition }) => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, [position]);
 
   // Animation loop using useTick (PixiJS equivalent of requestAnimationFrame)
   useTick((delta) => {
@@ -215,12 +239,11 @@ const Character: React.FC<CharacterPosition> = ({ initialPosition }) => {
 
   return (
     <Sprite
-      texture={currentTexture}
+      image={currentTexture}
       x={clampedPosition.x}
       y={clampedPosition.y}
       anchor={0.5}
-      width={32}
-      height={32}
+     
     />
   );
 };
