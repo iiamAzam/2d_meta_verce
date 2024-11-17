@@ -129,7 +129,7 @@ const MetaverseLandingPage: React.FC = () => {
 
         <h1 className="text-5xl font-bold mb-4">Welcome to Metaverse</h1>
         <p className="text-xl mb-8">Explore the boundless possibilities of the digital realm.</p>
-        <Button onClick={()=>navigate('/signup')} className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-6 py-3 rounded-md">
+        <Button onClick={()=>navigate('/signin')} className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-6 py-3 rounded-md">
           Join Now
         </Button>
       </motion.div>

@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { Camera } from 'lucide-react';
-
+import { useAuth } from  '../httpconnection/Auth'
+import { useNavigate } from 'react-router-dom';
 const SignUpForm = () => {
+  const  navigate = useNavigate()
+  const  {signup} = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignUp = () => {
-    // Add your sign-up logic here
-    console.log('Signing up:', { username, password });
+  const handleSignUp = async(e) => {
+    e.preventDefault();
+    const res= await signup({username,password})
+    if (res){
+      navigate('/signin')
+    }
   };
 
   return (
@@ -59,13 +65,24 @@ const SignUpForm = () => {
 };
 
 const SignInForm = () => {
+  const navigate = useNavigate()
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleSignIn = () => {
-    // Add your sign-in logic here
-    console.log('Signing in:', { username, password });
+  const {signin}= useAuth()
+  
+  const handleSignIn =async (e) => {
+    e.preventDefault();
+     const res = await signin({username,password})
+     if(res){
+      navigate('/user')
+     }else{
+      alert('password or username not match')
+     }
   };
+
+  const clickforregister=()=>{
+          navigate('/signup')
+  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -109,6 +126,7 @@ const SignInForm = () => {
           >
             Sign In
           </button>
+          <p>dont have account <span onClick={clickforregister} className='text-red-400 cursor-pointer'>click here</span></p>
         </form>
       </div>
     </div>

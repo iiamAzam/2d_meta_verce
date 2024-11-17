@@ -4,13 +4,18 @@ import SocketContextProvider from './socket.connection/SocketContext.js'
 import { BrowserRouter as Router } from 'react-router-dom'
 import Routesprovider from './Routes.tsx'
 import './index.css'
+import AuthContextProvider from './httpconnection/Auth.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+   
     <Router>
+    <AuthContextProvider>
     <SocketContextProvider>
         <Routesprovider/>
     </SocketContextProvider>
+    </AuthContextProvider>
     </Router>
+    
   </StrictMode>
 )

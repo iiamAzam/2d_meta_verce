@@ -1,121 +1,5 @@
-// import React,{ useEffect,useState} from 'react'
-
-// import {Sprite,useTick} from '@pixi/react'
-// import * as PIXI from 'pixi.js'
-// interface CharecterPosition {
-//     initialpostition :{x:number , y: number}
-// }
-
-
-
-
-// const Charecter :React.FC <CharecterPosition> = ({initialpostition})=>{
-//     const [position, setposition]= useState(initialpostition)
-//     const [direction , setdirection ]= useState<'up'|'down'|'left'|'right'>('down')
-//     const [ismoving,setmoving]= useState<boolean>(false)
-//     const [frame,setframe]= useState<number>(0)
-
-
-//     const textures = {
-//         down: [
-//             PIXI.Texture.from('../assets/school/charecters/comming.png'),
-//             PIXI.Texture.from('../assets/school/charecters/coming21.png'),
-//             PIXI.Texture.from('../assets/school/charecters/coming2.png'),
-//         ],
-//         up:[
-//             PIXI.Texture.from('../assets/school/charecters/up1.png'),
-//             PIXI.Texture.from('../assets/school/charecters/up2.png'),
-//             PIXI.Texture.from('../assets/school/charecters/up3.png')
-//         ],
-//         left :[
-//             PIXI.Texture.from('../assets/school/charecters/left1.png'),
-//             PIXI.Texture.from('../assets/school/charecters/left2.png'),
-//             PIXI.Texture.from('../assets/school/charecters/left3.png')
-//         ],
-//         right:[
-//             PIXI.Texture.from('../assets/school/charecters/right1.png'),
-//             PIXI.Texture.from('../assets/school/charecters/right2.png'),
-//             PIXI.Texture.from('../assets/school/charecters/right3.png')
-//         ],  
-//     }           
-//         useEffect(()=>{
-//             const handleKeyDown = (e:KeyboardEvent)=>{
-//                 setmoving(true)
-//                 setposition(prevpos=>{
-//                     const speed=5
-//                     switch(e.key){
-//                         case 'ArrowUp':
-//                         case 'w':
-//                             setdirection('up')
-//                             return {x:prevpos.x,y:prevpos.y-speed}
-//                         case 'ArrowDown':
-//                         case 's':
-//                             setdirection('down')
-//                             return {x:prevpos.x,y:prevpos.y+speed}
-//                         case 'ArrowLeft':
-//                         case 'a':
-//                             setdirection('left')
-//                             return {x:prevpos.x-speed,y:prevpos.y}
-//                         case 'ArrowRight':
-//                         case 'd':
-//                             setdirection('right')
-//                             return {x:prevpos.x+speed,y:prevpos.y}
-//                         default:
-//                             return prevpos
-
-//                     }
-//                 }
-//                     )
-            
-//         }
-//         const handleKeyup=()=>{
-//             setmoving(false)
-//             setframe(0)
-//           }  
-
-//         window.addEventListener('keydown',handleKeyDown)
-//         window.addEventListener('keyup',handleKeyup)
-
-//         return ()=>{
-//             window.removeEventListener('keydown',handleKeyDown)
-//             window.removeEventListener('keyup',handleKeyup)
-//         }
-//     },[])
-    
-//     useTick((delta)=>{
-//         if (ismoving){
-//             setframe((prevframe)=>(delta+prevframe*0.1)%2+1)
-//         }
-//     })
-    
-//     const currenttexture=textures[direction][ismoving ? Math.floor(frame):1]
-//     const clampPosition = (pos: { x: number; y: number }) => ({
-//         x: Math.max(0, Math.min(pos.x, 1120)), 
-//         y: Math.max(0, Math.min(pos.y, 576)), 
-//       });
-//       const clampedPosition = clampPosition(position);
-
-
-//     return (
-//         <Sprite
-//         texture={currenttexture}
-//         x={clampedPosition.x}
-//         y={clampedPosition.y}
-//         anchor={0.5}
-//         width={32}
-//         height={32}
-        
-//       />
-//             )
-// }
-
-// export default Charecter
-
-
-
-
 import React, { useEffect, useState } from 'react';
-import { Sprite, useTick } from '@pixi/react';
+import { Sprite, useTick, Text } from '@pixi/react';
 import image1 from '../assets/school/charecters/comming.png'
 import image2 from '../assets/school/charecters/comming21.png'
 import image3 from  '../assets/school/charecters/coming2.png'
@@ -129,14 +13,14 @@ import image10 from  '../assets/school/charecters/right1.png'
 import image11 from  '../assets/school/charecters/right2.png'
 import image12 from '../assets/school/charecters/right3.png'
 import { classroomLayout,TILE_SIZE } from '../pages/metaCanvas';
-
-
+import * as PIXI from 'pixi.js'
 
 interface CharacterPosition {
   initialPosition: { x: number; y: number };
+  name?:string
 }
 
-const Character: React.FC<CharacterPosition> = ({ initialPosition }) => {
+const Character: React.FC<CharacterPosition> = ({ initialPosition, name }) => {
   const [position, setPosition] = useState(initialPosition);
   const [direction, setDirection] = useState<'up' | 'down' | 'left' | 'right'>('down');
   const [isMoving, setMoving] = useState<boolean>(false);
@@ -229,22 +113,35 @@ const Character: React.FC<CharacterPosition> = ({ initialPosition }) => {
   // Get the current texture based on direction and animation frame
   const currentTexture = textures[direction][isMoving ? Math.floor(frame) : 0];
 
-  // Ensure character stays within boundaries
-  const clampPosition = (pos: { x: number; y: number }) => ({
-    x: Math.max(0, Math.min(pos.x, 1120)), // Width of the room
-    y: Math.max(0, Math.min(pos.y, 576)), // Height of the room
-  });
-
-  const clampedPosition = clampPosition(position);
+ 
 
   return (
+    <>
+      <Text
+        text={name}
+        x={position.x}
+        y={position.y - 20}
+        anchor={0.5}
+        style={
+          new PIXI.TextStyle({
+            fontFamily: 'Arial',
+            fontSize: 9,
+            fill: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 3,
+          })
+        }
+      
+      />
+
     <Sprite
       image={currentTexture}
-      x={clampedPosition.x}
-      y={clampedPosition.y}
+      x={position.x}
+      y={position.y}
       anchor={0.5}
      
     />
+    </>
   );
 };
 

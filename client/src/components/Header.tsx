@@ -2,8 +2,13 @@ import React from 'react'
 interface textSize{
     size:string
 }
-
+import { useNavigate } from 'react-router-dom'
 const Header:React.FC<textSize> = ({size:textSize})=> {
+            const navigate = useNavigate()
+            const gotoclick=()=>{
+                navigate('/meta')
+            }
+
   return (
     <div className={`flex  text-[${textSize}]  gap-5`}>
                 <h1>
@@ -21,8 +26,8 @@ const Header:React.FC<textSize> = ({size:textSize})=> {
                     </li>
                 </ul>
                 <div className=' ml-auto bg-blue-500 px-2 py-1 text-white rounded-lg'>
-                    <button >
-                        Creat space
+                    <button onClick={gotoclick} >
+                        GotoMap
                     </button>
                 </div>
 

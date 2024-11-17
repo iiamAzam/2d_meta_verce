@@ -10,6 +10,7 @@ import image9 from '../assets/school/PineTools.com_files/library.png'
 import image10 from '../assets/school/PineTools.com_files/board.png'
 import image11 from '../assets/school/PineTools.com_files/chaird.png'
 import Charecter from '../components/Charecter';
+import { useAuth } from '../httpconnection/Auth';
 type tileType=0|1|2|3|4|5|6|7|8|9
 type ClassroomLayout=tileType[][]
 interface Tilemap{
@@ -35,7 +36,7 @@ export const classroomLayout: ClassroomLayout = [
   [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
   [2, 0, 5, 0, 5, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 2],
   [2, 0, 6, 0, 6, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 2],
-  [2, 0, 5, 0, 5, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 2],
+  [2, 0, 5, 0, 5, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 2], 
   [2, 0, 6, 0, 6, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 2],
   [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
   [2, 0, 7, 0, 7, 0, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 2],
@@ -53,6 +54,7 @@ export const classroomLayout: ClassroomLayout = [
 
 
 const MetaCanvas: React.FC = () => {
+        const {nickname}=useAuth()
         return (
           <Stage  width={TILE_SIZE * 35} height={TILE_SIZE * 18} options={{ backgroundColor: 0xe8f0f2 }}>
             <Container 
@@ -75,7 +77,7 @@ const MetaCanvas: React.FC = () => {
                     })
                   )}
           
-            <Charecter initialPosition={{ x: 300, y: 200 }} />
+            <Charecter initialPosition={{ x: 200, y: 200 }} name={nickname} />
             </Container>
           </Stage>
 
