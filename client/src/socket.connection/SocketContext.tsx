@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useEffect, useRef, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useRef, ReactNode, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 interface SocketContextType {
   socket: Socket | null;
-  addconnection:(spaceId:string)=>void
+  isconnected:boolean
 }
 
 export const SocketContext = createContext<SocketContextType | undefined>(undefined);
@@ -14,12 +14,14 @@ interface SocketContextProviderProps {
 
 const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children }) => {
   const socketRef = useRef<Socket | null>(null);
+  const [isconnected,setisconnected] =useState<boolean>(false)
   useEffect(() => {
     // Initialize the socket connection
     socketRef.current = io('http://localhost:3000');
 
     // Log when connected
     socketRef.current.on('connect', () => {
+        setisconnected(true)
       console.log('Connected to Socket.IO server');
     });
 
@@ -35,7 +37,7 @@ const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children 
 
 
   return (
-    <SocketContext.Provider value={{ socket: socketRef.current }}>
+    <SocketContext.Provider value={{ socket: socketRef.current,isconnected }}>
       {children}
     </SocketContext.Provider>
   );

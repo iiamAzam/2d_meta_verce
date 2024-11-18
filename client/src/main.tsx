@@ -8,14 +8,15 @@ import AuthContextProvider from './httpconnection/Auth.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    
+     <SocketContextProvider>
     <Router>
     <AuthContextProvider>
-    <SocketContextProvider>
+
         <Routesprovider/>
-    </SocketContextProvider>
+
     </AuthContextProvider>
     </Router>
+    </SocketContextProvider>
 
   </StrictMode>
 

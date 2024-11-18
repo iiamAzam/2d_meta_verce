@@ -5,30 +5,27 @@ import image1 from '../assets/6480593.jpg'
 import avatar from '../assets/school/charecters/comming21.png'
 import { useAuth } from '../httpconnection/Auth'
 import { useSocket } from "../socket.connection/SocketContext";
-import axios from 'axios'
-
-
 const imagearr:string[]=[avatar]
 function UserData() {
     const [nickname,setnickname]= useState('')
     const [animation , setanimation] = useState(false)
     const {setupnickname,token} = useAuth()
     const {socket} = useSocket()
+
+
+
     const onclicksave=async()=>{
             try {
-               setupnickname(nickname)
-
-               const response = await axios.post(`http://localhost:3000/api/v1/space`,{
-                  name: 'Test Space',
-                  dimensions: '100x200',
-                  thumnail:'exampl.com',
-                  mapId: 'map23'
-                },
-                {
-                  headers: { Authorization: `Bearer ${token}` }
-                }
-              );
-                 setanimation(true)
+                 setupnickname(nickname)
+                 if (socket){
+                    socket.emit('initialdata',{
+                        type:'join',
+                        spacId:"673b45aad40fd071ceaecc37",
+                        token,
+                        nickname
+                    })
+                 }
+                   setanimation(true)
 
             }catch (error){
                 console.error('Save failed:', error)
