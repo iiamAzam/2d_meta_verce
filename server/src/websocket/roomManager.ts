@@ -5,7 +5,7 @@ export class Roommanager {
     private static instance: Roommanager;
 
     private constructor() {
-        // Private constructor to enforce singleton pattern
+        
     }
 
     public static getInstance(): Roommanager {

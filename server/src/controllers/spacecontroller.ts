@@ -27,7 +27,7 @@ class Space {
                 })
 
             }
-            
+
         }
 
         async spaceDelete(req:Request,res:Response){
@@ -47,7 +47,7 @@ class Space {
                                     message : "somthing went wrong ",
                                     error: error
                             })
-                    }   
+                    }
         }
 
         async getaspace(req:Request,res:Response){
@@ -76,7 +76,7 @@ class Space {
                     {
                          spaces
                     }
-    
+
                 )}
                 catch (error){
                         return res.status (400).json({
@@ -104,9 +104,9 @@ class Space {
                         status:false
                 })
             }
-            
+
          }
-         // need to impliment delete an element 
+         // need to impliment delete an element
 
 }
 

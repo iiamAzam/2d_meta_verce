@@ -1,4 +1,4 @@
-import { userAuthentication } from "../controllers/authcontrollers";
+import { console } from "inspector";
 import { spaceModel } from "../schema/spaceSchema";
 import { Roommanager } from "./roomManager";
 import jwt from "jsonwebtoken";
@@ -22,7 +22,7 @@ export class User {
     private x: number;
     private y: number;
     public Socket: Socket;
-
+    public nickname?:string
     constructor(Socket: Socket) {
         this.id = getRandomString(10);
         this.x = 0;
@@ -32,15 +32,17 @@ export class User {
     }
 
     initHandler() {
-        this.Socket.on('connection', async (data) => {
-            const { type, spacId, token } = data;
-                   
+        this.Socket.on('initialdata', async (data) => {
+            const { type, spacId, token, nickname } = data;
+            console.log(type);
             try {
                 switch (type) {
                     case 'join':
                         try {
+
+
                             const userId = jwt.verify(token, SECRET_KEY) as string;
-                            this.userid = userId;  
+                            this.userid = userId;
                             const space = await spaceModel.findOne({ spacId });
                             if (!space) {
                                 this.Socket.disconnect();
@@ -48,8 +50,9 @@ export class User {
                             }
 
                             this.spaceId = spacId;
+                            this.nickname=nickname
                             Roommanager.getInstance().addUser(spacId, this);
-                            
+
                             this.x = Math.floor(Math.random() * space.width);
                             this.y = Math.floor(Math.random() * space.height);
                             this.Socket.emit("spacejoined", {
@@ -57,7 +60,7 @@ export class User {
                                 y: this.y,
                                 users: Roommanager.getInstance().rooms.get(spacId)
                                     ?.filter(x => x.id !== this.id)
-                                    ?.map((u) => ({ id: u.id })) ?? []
+                                    ?.map((u) => ({ id: u.id })) ?? [],
                             });
 
                         } catch (error) {
@@ -72,8 +75,8 @@ export class User {
                         const { x, y } = data;
                         const xdisplacement = Math.abs(this.x - x);
                         const ydisplacement = Math.abs(this.y - y);
-                        
-                        if ((xdisplacement === 1 && ydisplacement === 0) || 
+
+                        if ((xdisplacement === 1 && ydisplacement === 0) ||
                             (xdisplacement === 0 && ydisplacement === 1)) {
                             this.x = x;
                             this.y = y;
@@ -117,7 +120,7 @@ export class User {
                 this.spaceId,
                 this
             );
-            
+
             Roommanager.getInstance().removeUser(
                 this,
                 this.spaceId
@@ -178,11 +181,11 @@ export class User {
 // import jwt, { JsonWebTokenError } from "jsonwebtoken"
 // import { Socket } from "socket.io"
 // const getrandomstring=(length:number)=>{
-//        const alpha= 'ABCDEFGHIJKLMNOPQRSTUVWX' 
-//        let result = '' 
+//        const alpha= 'ABCDEFGHIJKLMNOPQRSTUVWX'
+//        let result = ''
 //        for (let i=0; i<length; i++){
 //             result = alpha.charAt( Math.random()*alpha.length)
-//             return result     
+//             return result
 //         }
 // }
 // const secret_key="ok_this_working1234"
@@ -197,10 +200,10 @@ export class User {
 //            this.id=getrandomstring(10)
 //            this.x=0;
 //            this.y=0;
-//            this.Socket=Socket 
+//            this.Socket=Socket
 //            this.initHndler()
-     
-//         } 
+
+//         }
 //         initHndler(){
 //           this.Socket.on('connection', async  (data)=>{
 //                 const {type,spacId,token}=data
@@ -209,14 +212,14 @@ export class User {
 //                     const userId = jwt.verify(token,secret_key) as any
 //                     if (!userId){
 //                         this.Socket.disconnect()
-//                         return 
-//                     } 
-//                     this.userid=userId  
-//                     const isSpaceId = await spaceModel.findOne({spacId}) 
+//                         return
+//                     }
+//                     this.userid=userId
+//                     const isSpaceId = await spaceModel.findOne({spacId})
 //                     if (!isSpaceId){
 //                         this.Socket.disconnect()
-//                         return    
-//                     } 
+//                         return
+//                     }
 //                     this.spaceId=spacId
 //                     Roommanager.getinstatance().adduser(spacId,this)
 //                     this.x=Math.floor(Math.random()*isSpaceId?.width)
@@ -226,7 +229,7 @@ export class User {
 //                          y:this.y,
 //                          users:Roommanager.getinstatance().rooms.get(spacId)?.filter(x=>x.id!==this.id)?.map((u)=>({id:u.id}))??[]
 //                         })
-//                     break    
+//                     break
 
 //                     case 'move':
 //                         const {x,y}=data
@@ -242,7 +245,7 @@ export class User {
 //                                         },
 //                                         this.spaceId,
 //                                         this
-                                       
+
 //                                 )
 //                                 return
 //                         }
@@ -260,7 +263,7 @@ export class User {
 //         }
 //         distroy(){
 //             Roommanager.getinstatance().broadcast(
-                
+
 //                 { type:'user-left',
 //                     payload:{
 //                         userId:this.userid
@@ -277,5 +280,3 @@ export class User {
 //             this.Socket.send(payload)
 //         }
 //     }
-
-  

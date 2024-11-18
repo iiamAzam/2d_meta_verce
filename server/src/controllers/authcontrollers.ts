@@ -48,7 +48,7 @@ class Auth {
                 status : false ,
                 message : 'username or password invalid '
             })
-        }
+    }
         const secreat_key="ok_this_working1234"
         const option:SignOptions={expiresIn:'24h'}
         const token = jwt.sign({...check},secreat_key,option)
@@ -56,7 +56,7 @@ class Auth {
                 userId : check._id,
                 token
         })
-    }       
+    }
 }
 
 
@@ -94,7 +94,7 @@ export const userAuthentication = new Auth()
 
 
 // class Auth {
-   
+
 //    async authRegister(req:Request,res:Response){
 //             console.log(req.body)
 //             const {name,email,password} = req.body
@@ -122,7 +122,7 @@ export const userAuthentication = new Auth()
 
 //     async Login(req:Request,res:Response){
 //                 const {email,password}=req.body
-     
+
 //            try { const check = await authDB.findOne({email})
 //                 if(!check) {
 //                         return res.status(401).json(
@@ -148,8 +148,8 @@ export const userAuthentication = new Auth()
 //                         error:eror
 //                 })
 //             }
-        
-                
+
+
 //     }
 
 
