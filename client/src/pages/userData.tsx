@@ -4,36 +4,51 @@ import Avatars from '../components/avatars'
 import image1 from '../assets/6480593.jpg'
 import avatar from '../assets/school/charecters/comming21.png'
 import { useAuth } from '../httpconnection/Auth'
+import { useSocket } from "../socket.connection/SocketContext";
 import axios from 'axios'
+
 
 const imagearr:string[]=[avatar]
 function UserData() {
     const [nickname,setnickname]= useState('')
     const [animation , setanimation] = useState(false)
     const {setupnickname,token} = useAuth()
+    const {socket} = useSocket()
     const onclicksave=async()=>{
             try {
                setupnickname(nickname)
-               setanimation(true)
+
+               const response = await axios.post(`http://localhost:3000/api/v1/space`,{
+                  name: 'Test Space',
+                  dimensions: '100x200',
+                  thumnail:'exampl.com',
+                  mapId: 'map23'
+                },
+                {
+                  headers: { Authorization: `Bearer ${token}` }
+                }
+              );
+                 setanimation(true)
+
             }catch (error){
                 console.error('Save failed:', error)
             }
     }
 
   return (
-    <div className='mx-10 mt-5'>          
+    <div className='mx-10 mt-5'>
         <div className='mb-10' >
-                      
+
         <Header size={'18px'}/>
             </div>
                 <div className=''>
                     <div>
-                        <img 
+                        <img
                          src={image1}
                          className='w-[550px] float-end'
-                        
+
                         />
-                        
+
                     </div>
                     <h1 className='text-[25px] mb-2'>
                             Profile Setting
@@ -41,9 +56,9 @@ function UserData() {
                  <div className='text-[20px] mb-10'>
                  <label className=' mr-10 block mb-2'  htmlFor="name">Nickname </label>
                  <input type="text" id="name" value={nickname} onChange={(e)=>setnickname(e.target.value)}  className='border block rounded-md px-1 w-[400px] border-black' placeholder='Nickname' />
-                 
+
             </div>
-            
+
             <div className='text-[20px] w-[450px] '>
                  <div className=''>
                     <h2 className='mb-3'>
@@ -68,10 +83,10 @@ function UserData() {
             </div>
 
         </div>
-                
+
     </div>
-      
-        
+
+
   )
 }
 

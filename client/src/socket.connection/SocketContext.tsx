@@ -3,9 +3,10 @@ import { io, Socket } from 'socket.io-client';
 
 interface SocketContextType {
   socket: Socket | null;
+  addconnection:(spaceId:string)=>void
 }
 
-const SocketContext = createContext<SocketContextType | undefined>(undefined);
+export const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
 interface SocketContextProviderProps {
   children: ReactNode;
@@ -13,7 +14,6 @@ interface SocketContextProviderProps {
 
 const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children }) => {
   const socketRef = useRef<Socket | null>(null);
-
   useEffect(() => {
     // Initialize the socket connection
     socketRef.current = io('http://localhost:3000');
@@ -31,6 +31,8 @@ const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children 
       }
     };
   }, []);
+
+
 
   return (
     <SocketContext.Provider value={{ socket: socketRef.current }}>

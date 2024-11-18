@@ -8,7 +8,7 @@ import AuthContextProvider from './httpconnection/Auth.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-   
+    
     <Router>
     <AuthContextProvider>
     <SocketContextProvider>
@@ -16,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
     </SocketContextProvider>
     </AuthContextProvider>
     </Router>
-    
+
   </StrictMode>
+
 )

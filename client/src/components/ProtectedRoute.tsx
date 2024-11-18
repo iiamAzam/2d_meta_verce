@@ -14,7 +14,7 @@ const  ProtectedRoute:React.FC<Props>=({children}) =>{
         if(!isauthenticated){
             return <Navigate to='/signin'/>
         }
-        return children
+            return children
         }
 
 export default ProtectedRoute

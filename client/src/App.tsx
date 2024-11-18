@@ -59,9 +59,9 @@ const MetaverseLandingPage: React.FC = () => {
     style={{
       backgroundImage: 'radial-gradient(circle, #c33764, #1d2671)',
     }}
-    >  
-    
-    
+    >
+
+
 
     <AnimatePresence
       initial={false}
@@ -71,8 +71,8 @@ const MetaverseLandingPage: React.FC = () => {
        className=" flex items-center   text-white text-center bg-[length:200%_200%]"
        initial="hidden  scale-10 "
        whileInView="visible scale-100"
-       
-      
+
+
       >
         <ul className='flex gap-10 mt-5 cursor-pointer px-10'>
           <li>Home</li>
@@ -80,7 +80,7 @@ const MetaverseLandingPage: React.FC = () => {
           <li>Contact</li>
         </ul>
       </motion.div>
-       
+
       </AnimatePresence>
       {/* Hero Section */}
       <motion.div
@@ -89,12 +89,12 @@ const MetaverseLandingPage: React.FC = () => {
         animate={{y:0}}
         transition={{type:"spring",stiffness:50,damping:20}}
       >
-        
+
         <motion.div className='mx-4 mt-5 text-[10px] left-6  absolute'
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        
+
         >
           <motion.img src={image} className='w-[150px] rounded-full'
             alt='animated imag'
@@ -112,19 +112,19 @@ const MetaverseLandingPage: React.FC = () => {
             alt='animated imag'
             initial={{x:"100vw"}}
             animate={{x:800,y:-200}}
-            
+
             transition={{type:"spring",stiffness:50,damping:20}}
           />
            <motion.img src={image} className='w-[150px] h-[150px] object-cover rounded-full'
             alt='animated imag'
             initial={{x:"100vw"}}
             animate={{x:800,y:-120}}
-            
+
             transition={{type:"spring",stiffness:50,damping:20}}
           />
-         
+
           </motion.div>
-        
+
 
 
         <h1 className="text-5xl font-bold mb-4">Welcome to Metaverse</h1>
@@ -154,7 +154,7 @@ const MetaverseLandingPage: React.FC = () => {
         </div>
       </div>
 
-     
+
 
       {/* Call to Action Section */}
       <div className="py-12 bg-gradient-to-b from-[#161B22]/30 to-[#0D1117]/30 backdrop-blur-xl">
