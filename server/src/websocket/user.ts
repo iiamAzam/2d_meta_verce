@@ -1,8 +1,14 @@
 import { console } from "inspector";
 import { spaceModel } from "../schema/spaceSchema";
 import { Roommanager } from "./roomManager";
-import jwt from "jsonwebtoken";
+import jwt, {  JwtPayload } from "jsonwebtoken";
 import { Socket } from "socket.io";
+interface Datatype{
+        type:string,
+        spacId:string,
+        token:string,
+        nickname:string
+}
 
 const getRandomString = (length: number): string => {
     const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWX';
@@ -15,37 +21,40 @@ const getRandomString = (length: number): string => {
 
 const SECRET_KEY = "ok_this_working1234";
 
-export class User {
+  class User {
     public id: string;
-    public userid?: string;
+    public userid?:JwtPayload|null;
     public spaceId?: string;
     private x: number;
     private y: number;
-    public Socket: Socket;
+    public socket: Socket;
     public nickname?:string
-    constructor(Socket: Socket) {
+    constructor(socket: Socket) {
+        console.log('User constructor called for socket:', socket.id);
         this.id = getRandomString(10);
         this.x = 0;
         this.y = 0;
-        this.Socket = Socket;
+        this.socket = socket;
         this.initHandler();
     }
 
     initHandler() {
-        this.Socket.on('initialdata', async (data) => {
-            const { type, spacId, token, nickname } = data;
-            console.log(type);
+        console.log(this.socket)
+
+        this.socket.on('initialdata' , async (data) => {
+            console.log(data);
+
+            const { type, spacId,token, nickname } = data as Datatype
+            console.log(type)
             try {
                 switch (type) {
                     case 'join':
                         try {
-
-
-                            const userId = jwt.verify(token, SECRET_KEY) as string;
+                            const userId = jwt.verify(token, SECRET_KEY) as JwtPayload|null
                             this.userid = userId;
                             const space = await spaceModel.findOne({ spacId });
                             if (!space) {
-                                this.Socket.disconnect();
+                                this.socket.disconnect();
                                 return;
                             }
 
@@ -55,7 +64,7 @@ export class User {
 
                             this.x = Math.floor(Math.random() * space.width);
                             this.y = Math.floor(Math.random() * space.height);
-                            this.Socket.emit("spacejoined", {
+                            this.socket.emit("spacejoined", {
                                 x: this.x,
                                 y: this.y,
                                 users: Roommanager.getInstance().rooms.get(spacId)
@@ -65,8 +74,10 @@ export class User {
 
                         } catch (error) {
                             if (error instanceof jwt.JsonWebTokenError) {
-                                this.Socket.disconnect();
+                                console.log(error);
+                                  this.socket.disconnect();
                             }
+                            console.error(error)
                             return;
                         }
                         break;
@@ -91,7 +102,7 @@ export class User {
                             return;
                         }
 
-                        this.Socket.emit("movement-rejected", {
+                        this.socket.emit("movement-rejected", {
                             x: this.x,
                             y: this.y
                         });
@@ -99,13 +110,15 @@ export class User {
                 }
             } catch (error) {
                 console.error('Error handling socket event:', error);
-                this.Socket.emit('error', { message: 'Internal server error' });
+                this.socket.emit('error', { message: 'Internal server error' });
             }
         });
 
-        this.Socket.on('disconnect', () => {
-            this.destroy();
-        });
+
+        // this.socket.on('disconnect', () => {
+        //     this.destroy();
+        // });
+        return 'ok'
     }
 
     destroy() {
@@ -129,9 +142,13 @@ export class User {
     }
 
     send(payload: any) {
-        this.Socket.emit('message', payload);
+        this.socket.emit('message', payload);
     }
 }
+
+export default User
+
+
 
 
 

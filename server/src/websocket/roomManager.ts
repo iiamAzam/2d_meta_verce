@@ -1,11 +1,11 @@
-import { User } from "./user";
+import  User  from "./user";
 
 export class Roommanager {
     public rooms: Map<string, User[]> = new Map();
     private static instance: Roommanager;
 
     private constructor() {
-        
+
     }
 
     public static getInstance(): Roommanager {
@@ -70,7 +70,7 @@ export class Roommanager {
             }
 
             const filteredUsers = existingUsers.filter(u => u.id !== user.id);
-            
+
             // If space is empty after removing user, delete the space
             if (filteredUsers.length === 0) {
                 this.rooms.delete(spaceId);
@@ -111,7 +111,7 @@ export class Roommanager {
             users.forEach((user) => {
                 if (user.id !== sender.id) {
                     try {
-                        user.Socket.emit('message', message);
+                        user.socket.emit('message', message);
                     } catch (error) {
                         console.error(`Failed to send message to user ${user.id}:`, error);
                     }
@@ -236,16 +236,13 @@ export class Roommanager {
 //             return}
 //             broadcast (message:any, roomid:any,user:User){
 //                     if(this.rooms.has(roomid)){
-//                         return 
+//                         return
 //                     }
 //                     this.rooms.get(roomid)?.forEach((u)=>{
 //                         if(u.id!==user.id){
-//                             u.Socket.send(message)  
+//                             u.socket.send(message)
 //                         }
 //                     })
-                     
-//                 } 
+
+//                 }
 //      }
-
-
-

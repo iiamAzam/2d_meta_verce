@@ -4,7 +4,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import authrout from './routes/auth_rout'
 import cookieparser from 'cookie-parser'
-import { User } from './websocket/user';
+import User from './websocket/user';
 import cors from 'cors'
 const app = express();
 const server = http.createServer(app);
@@ -16,7 +16,7 @@ const io = new Server(server,{
     allowedHeaders: ['Content-Type', 'Authorization']}
 });
 app.use(cors({
-  origin: '*', 
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }))
@@ -37,7 +37,7 @@ app.use('/api/v1', authrout)
 io.on('connection', (socket) => {
   const user = new User(socket)
   user.initHandler()
-  console.log('A user connected');
+console.log(user.id);
   socket.on('disconnect', () => {
     console.log('A user disconnected');
   });

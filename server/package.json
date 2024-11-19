@@ -7,7 +7,7 @@
     "start": "nodemon --watch dist/index.js",
     "build": "tsc",
     "test": "jest",
-    "dev": "ts-node-dev --respawn src/index.ts"
+    "dev": "tsc --watch  src/index.ts"
   },
   "author": "Your Name",
   "license": "ISC",
