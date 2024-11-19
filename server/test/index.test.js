@@ -46,15 +46,15 @@ beforeAll(async()=>{
 })
 })
 
-afterAll(async () => {
-  await mongoose.connection.dropDatabase().then(()=>
-  {
-    console.log('the db is dropped')
+// afterAll(async () => {
+//   await mongoose.connection.dropDatabase().then(()=>
+//   {
+//     console.log('the db is dropped')
 
-  }
-  ); 
-  await mongoose.connection.close();
-});
+//   }
+//   );
+//   await mongoose.connection.close();
+// });
 
 const BACKEND_URL = 'http://localhost:3000';
 // mongodb://localhost:27017/ecommerce
@@ -71,7 +71,7 @@ const generateRandomString = () => Math.random().toString(36).substring(7);
 const setupTestUser = async(role = 'User') => {
   const username = `user_${generateRandomString()}`;
   const password = 'testPassword123!';
-  
+
   const response=await axios.post(`${BACKEND_URL}/api/v1/signup`, {
     username,
     password,
@@ -82,7 +82,7 @@ const setupTestUser = async(role = 'User') => {
     username,
     password
   });
-  
+
   return {
     username,
     password,
@@ -165,7 +165,7 @@ describe('User Profile & Metadata', () => {
   beforeAll(async () => {
     user = await setupTestUser('User');
     admin = await setupTestUser('Admin');
-    
+
     // Create test avatar
     const avatarResponse = await axios.post(
       `${BACKEND_URL}/api/v1/admin/avatar`,
@@ -217,9 +217,9 @@ describe('User Profile & Metadata', () => {
 
   test('should get bulk user metadata', async () => {
     const response = await axios.get(`${BACKEND_URL}/api/v1/user/metadata/bulk`,{
-                
+
         headers: { Authorization: `Bearer ${user.token}` }
-      
+
 
     });
     expect(response.status).toBe(200);
@@ -282,6 +282,8 @@ describe('Spaces', () => {
     );
 
     expect(response.status).toBe(200);
+    console.log('the spaceid is '+ " | "+ response.data.spaceId);
+
     expect(response.data).toHaveProperty('spaceId');
   });
 
@@ -369,7 +371,7 @@ describe('Admin Operations', () => {
       }
     )
     expect(response.status).toBe(403)
-    
+
   });
 
   test('should create and update element as admin', async () => {
@@ -452,20 +454,20 @@ describe('socket connection operations', () => {
              socket2=io(BACKEND_URL)
              socket1.on('connect', () => {
               console.log('Client connected:');
-             
+
             });
             socket2.on('connect', () => {
               console.log('Client connected:');
-            
+
             });
 
           });
-         
+
           test('join',async()=>{
             socket1.emit('connection',{
                  type :"join",
                  spacId :spaceId,
-                 token: user.token 
+                 token: user.token
               })
               expect(true).toBe(true);
               socket1.on("spacejoined",(data)=>{
@@ -488,10 +490,10 @@ describe('socket connection operations', () => {
                     console.log(x,y)
                     expect(true).toBe(true);
               })
-        
+
           })
 
 
 
-  
+
 })

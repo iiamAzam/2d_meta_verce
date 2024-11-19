@@ -1,4 +1,3 @@
-import { console } from "inspector";
 import { spaceModel } from "../schema/spaceSchema";
 import { Roommanager } from "./roomManager";
 import jwt, {  JwtPayload } from "jsonwebtoken";
@@ -23,12 +22,13 @@ const SECRET_KEY = "ok_this_working1234";
 
   class User {
     public id: string;
-    public userid?:JwtPayload|null;
+    public userid?:string|null;
     public spaceId?: string;
     private x: number;
     private y: number;
     public socket: Socket;
     public nickname?:string
+
     constructor(socket: Socket) {
         console.log('User constructor called for socket:', socket.id);
         this.id = getRandomString(10);
@@ -39,21 +39,21 @@ const SECRET_KEY = "ok_this_working1234";
     }
 
     initHandler() {
-        console.log(this.socket)
 
         this.socket.on('initialdata' , async (data) => {
-            console.log(data);
-
             const { type, spacId,token, nickname } = data as Datatype
-            console.log(type)
             try {
                 switch (type) {
                     case 'join':
                         try {
-                            const userId = jwt.verify(token, SECRET_KEY) as JwtPayload|null
-                            this.userid = userId;
+                            const userId = jwt.verify(token, SECRET_KEY) as JwtPayload|{_id:string}
+                            this.userid = userId._id;
+                            console.log(userId)
+
                             const space = await spaceModel.findOne({ spacId });
+                            console.log(space)
                             if (!space) {
+                                console.log('id problem')
                                 this.socket.disconnect();
                                 return;
                             }
@@ -74,10 +74,12 @@ const SECRET_KEY = "ok_this_working1234";
 
                         } catch (error) {
                             if (error instanceof jwt.JsonWebTokenError) {
+                                console.log('catch1 problem')
                                 console.log(error);
                                   this.socket.disconnect();
                             }
                             console.error(error)
+                            console.log('catch1 problem')
                             return;
                         }
                         break;
@@ -113,12 +115,11 @@ const SECRET_KEY = "ok_this_working1234";
                 this.socket.emit('error', { message: 'Internal server error' });
             }
         });
+        this.socket.on('disconnect', () => {
+            this.destroy();
+        });
 
 
-        // this.socket.on('disconnect', () => {
-        //     this.destroy();
-        // });
-        return 'ok'
     }
 
     destroy() {

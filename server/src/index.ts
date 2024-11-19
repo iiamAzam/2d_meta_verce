@@ -37,7 +37,7 @@ app.use('/api/v1', authrout)
 io.on('connection', (socket) => {
   const user = new User(socket)
   user.initHandler()
-console.log(user.id);
+  console.log(user.id);
   socket.on('disconnect', () => {
     console.log('A user disconnected');
   });
