@@ -18,12 +18,16 @@ function UserData() {
             try {
                  setupnickname(nickname)
                  if (socket){
-                    socket.emit('initialdata',{
+                    console.log(token);
+
+                    socket.emit('initialdata',
+                        {
                         type:'join',
-                        spacId:"673b45aad40fd071ceaecc37",
-                        token,
-                        nickname
-                    })
+                        spacId:"673cc60f106b0304b72b7ca5",
+                        token:token,
+                        nickname:nickname
+                    }
+                )
                  }
                    setanimation(true)
 
