@@ -1,4 +1,4 @@
-import mongoose ,{ Document} from "mongoose";       
+import mongoose ,{ Document} from "mongoose";
 import { spaceModel } from "./spaceSchema";
 import { singleElement } from "./onlyelemt";
 interface elements extends Document{
@@ -21,15 +21,12 @@ const elementsSchema=new Schema({
 
      },
      x:{
-        type:String 
+        type:String
      },
      y: {
         type:String
      }
-     
+
 })
 
 export const spacelement=mongoose.model<elements>('element',elementsSchema)
-
-
-

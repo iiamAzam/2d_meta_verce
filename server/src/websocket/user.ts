@@ -1,197 +1,157 @@
-import { spaceModel } from "../schema/spaceSchema";
-import { Roommanager } from "./roomManager";
-import jwt, {  JwtPayload } from "jsonwebtoken";
-import { Socket } from "socket.io";
-interface Datatype{
-        type:string,
-        spacId:string,
-        token:string,
-        nickname:string
+import { spaceModel } from '../schema/spaceSchema'
+import { Roommanager } from './roomManager'
+import jwt, { JwtPayload } from 'jsonwebtoken'
+import { Socket } from 'socket.io'
+interface Datatype {
+  type: string
+  spacId: string
+  token: string
+  nickname: string
 }
 
 const getRandomString = (length: number): string => {
-    const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWX';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += alpha.charAt(Math.floor(Math.random() * alpha.length));
-    }
-    return result;
-};
+  const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWX'
+  let result = ''
+  for (let i = 0; i < length; i++) {
+    result += alpha.charAt(Math.floor(Math.random() * alpha.length))
+  }
+  return result
+}
 
-const SECRET_KEY = "ok_this_working1234";
+const SECRET_KEY = 'ok_this_working1234'
 
-  class User {
-    public id: string;
-    public userid?:string|null;
-    public spaceId?: string;
-    private x: number;
-    private y: number;
-    public socket: Socket;
-    public nickname?:string
+class User {
+  public id: string
+  public userid?: string | null
+  public spaceId?: string
+  private x: number
+  private y: number
+  public socket: Socket
+  public nickname?: string
 
-    constructor(socket: Socket) {
-        console.log('User constructor called for socket:', socket.id);
-        this.id = getRandomString(10);
-        this.x = 0;
-        this.y = 0;
-        this.socket = socket;
-        this.initHandler();
-    }
+  constructor(socket: Socket) {
+    this.id = getRandomString(10)
+    this.x = 0
+    this.y = 0
+    this.socket = socket
+    this.initHandler()
+  }
 
-    initHandler() {
-
-        this.socket.on('initialdata' , async (data) => {
-            const { type, spacId,token, nickname } = data as Datatype
+  initHandler() {
+    this.socket.on('initialdata', async (data) => {
+      const { type, spacId, token, nickname } = data as Datatype
+      try {
+        switch (type) {
+          case 'join':
             try {
-                switch (type) {
-                    case 'join':
-                        try {
-                            const userId = jwt.verify(token, SECRET_KEY) as JwtPayload|{_doc:{_id:string}}
-                            this.userid = userId._doc._id;
-                            console.log(spacId)
-                            const space = await spaceModel.findOne({ spacId });
-                            console.log(space)
-                            if (!space) {
-                                console.log('id problem')
-                                this.socket.disconnect();
-                                return;
-                            }
+              const userId = jwt.verify(token, SECRET_KEY) as
+                | JwtPayload
+                | { _doc: { _id: string } }
+              this.userid = userId._doc._id
 
-                            this.spaceId = spacId;
-                            this.nickname=nickname
-                            Roommanager.getInstance().addUser(spacId, this);
+              const space = await spaceModel.findOne({ name: 'Test Space' })
+              if (!space) {
+                console.log('id problem')
+                this.socket.disconnect()
+                return
+              }
 
-                            this.x = Math.floor(Math.random() * space.width);
-                            this.y = Math.floor(Math.random() * space.height);
-                            this.socket.emit("spacejoined", {
-                                x: this.x,
-                                y: this.y,
-                                users: Roommanager.getInstance().rooms.get(spacId)
-                                    ?.filter(x => x.id !== this.id)
-                                    ?.map((u) => ({ id: u.id })) ?? [],
-                            });
-
-                        } catch (error) {
-                            if (error instanceof jwt.JsonWebTokenError) {
-                                console.log('catch1 problem')
-                                console.log(error);
-                                  this.socket.disconnect();
-                            }
-                            console.error(error)
-                            console.log('catch1 problem')
-                            return;
-                        }
-                        break;
-
-                    case 'move':
-                        const { x, y } = data;
-                        const xdisplacement = Math.abs(this.x - x);
-                        const ydisplacement = Math.abs(this.y - y);
-
-                        if ((xdisplacement === 1 && ydisplacement === 0) ||
-                            (xdisplacement === 0 && ydisplacement === 1)) {
-                            this.x = x;
-                            this.y = y;
-                            Roommanager.getInstance().broadcast(
-                                {
-                                    x: this.x,
-                                    y: this.y
-                                },
-                                this.spaceId,
-                                this
-                            );
-                            return;
-                        }
-
-                        this.socket.emit("movement-rejected", {
-                            x: this.x,
-                            y: this.y
-                        });
-                        break;
-                }
+              this.spaceId = spacId
+              this.nickname = nickname
+              Roommanager.getInstance().addUser(spacId, this)
+              this.x = Math.floor(Math.random() * space.width)
+              this.y = Math.floor(Math.random() * space.height)
+              this.socket.emit('spacejoined', {
+                x: this.x,
+                y: this.y,
+                users:
+                  Roommanager.getInstance()
+                    .rooms.get(spacId)
+                    ?.filter((x) => x.id !== this.id)
+                    ?.map((u) => ({
+                      id: u.id,
+                      x: u.x,
+                      y: u.y,
+                    })) ?? [],
+              })
+              console.log(
+                Roommanager.getInstance()
+                  .rooms.get(spacId)
+                  ?.filter((x) => x.id !== this.id)
+              )
             } catch (error) {
-                console.error('Error handling socket event:', error);
-                this.socket.emit('error', { message: 'Internal server error' });
+              if (error instanceof jwt.JsonWebTokenError) {
+                console.log('catch1 problem')
+                console.log(error)
+                this.socket.disconnect()
+              }
+              console.error(error)
+              console.log('catch1 problem')
+              return
             }
-        });
-        this.socket.on('disconnect', () => {
-            this.destroy();
-        });
+            break
 
+          case 'move':
+            const { x, y } = data
+            const xdisplacement = Math.abs(this.x - x)
+            const ydisplacement = Math.abs(this.y - y)
 
-    }
-
-    destroy() {
-        if (this.spaceId) {
-            Roommanager.getInstance().broadcast(
+            if (
+              (xdisplacement === 1 && ydisplacement === 0) ||
+              (xdisplacement === 0 && ydisplacement === 1)
+            ) {
+              this.x = x
+              this.y = y
+              Roommanager.getInstance().broadcast(
                 {
-                    type: 'user-left',
-                    payload: {
-                        userId: this.userid
-                    }
+                  x: this.x,
+                  y: this.y,
                 },
                 this.spaceId,
                 this
-            );
+              )
+              return
+            }
 
-            Roommanager.getInstance().removeUser(
-                this,
-                this.spaceId
-            );
+            this.socket.emit('movement-rejected', {
+              x: this.x,
+              y: this.y,
+            })
+            break
         }
-    }
+      } catch (error) {
+        console.error('Error handling socket event:', error)
+        this.socket.emit('error', { message: 'Internal server error' })
+      }
+    })
+    this.socket.on('disconnect', () => {
+      this.destroy()
+    })
+  }
 
-    send(payload: any) {
-        this.socket.emit('message', payload);
+  destroy() {
+    if (this.spaceId) {
+      Roommanager.getInstance().broadcast(
+        {
+          type: 'user-left',
+          payload: {
+            userId: this.userid,
+          },
+        },
+        this.spaceId,
+        this
+      )
+
+      Roommanager.getInstance().removeUser(this, this.spaceId)
     }
+  }
+
+  send(payload: any) {
+    this.socket.emit('message', payload)
+  }
 }
 
 export default User
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { spaceModel } from "../schema/spaceSchema"
 // import { Roommanager } from "./roomManager"
