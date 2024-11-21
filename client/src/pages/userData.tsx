@@ -10,24 +10,23 @@ function UserData() {
     const [nickname,setnickname]= useState('')
     const [animation , setanimation] = useState(false)
     const {setupnickname,token} = useAuth()
-    const {socket} = useSocket()
-
-
-
+    const {socket,allusers} = useSocket()
     const onclicksave=async()=>{
             try {
                  setupnickname(nickname)
                  if (socket){
-                    console.log(token);
-
                     socket.emit('initialdata',
                         {
                         type:'join',
-                        spacId:"673cc60f106b0304b72b7ca5",
+                        spacId:"673cc2eb293f6068cd9f3ce6",
                         token:token,
                         nickname:nickname
                     }
                 )
+                    socket.on('spacejoined',(data)=>{
+                        allusers(data)
+
+                    })
                  }
                    setanimation(true)
 

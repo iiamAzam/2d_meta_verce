@@ -1,9 +1,27 @@
 import React, { createContext, useContext, useEffect, useRef, ReactNode, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+interface User{
+    id : string,
+    userid:string,
+    spceID:string,
+    nickname:string,
+    x:number,
+    y:number,
+}
+
+interface joinedsata{
+    x:number ,
+    y:number,
+    users:User[]
+}
+
+
 
 interface SocketContextType {
   socket: Socket | null;
-  isconnected:boolean
+  isconnected:boolean,
+  allusers:(data:joinedsata)=>void
+  data1:joinedsata|null
 }
 
 export const SocketContext = createContext<SocketContextType | undefined>(undefined);
@@ -15,6 +33,7 @@ interface SocketContextProviderProps {
 const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children }) => {
   const socketRef = useRef<Socket | null>(null);
   const [isconnected,setisconnected] =useState<boolean>(false)
+  const [data1,setdata]=useState<joinedsata|null>(null)
   useEffect(() => {
     // Initialize the socket connection
     socketRef.current = io('http://localhost:3000');
@@ -33,11 +52,15 @@ const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children 
       }
     };
   }, []);
+  const allusers=(data:joinedsata)=>{
+          setdata(data)
+  }
+
 
 
 
   return (
-    <SocketContext.Provider value={{ socket: socketRef.current,isconnected }}>
+    <SocketContext.Provider value={{ socket: socketRef.current,isconnected,allusers, data1 }}>
       {children}
     </SocketContext.Provider>
   );

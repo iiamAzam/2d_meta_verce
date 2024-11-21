@@ -1,3 +1,4 @@
+import { number } from "joi";
 import mongoose,{Document}from "mongoose";
 
 
@@ -14,8 +15,11 @@ const spacesSchema= new Schema({
         name: {
             type:String,
         },
-        dimensions:{
-            type:String
+        width:{
+            type:Number
+        },
+        height:{
+            type:Number
         },
         mapId:{
             type:String

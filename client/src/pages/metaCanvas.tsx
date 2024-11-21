@@ -15,7 +15,7 @@ type tileType=0|1|2|3|4|5|6|7|8|9
 type ClassroomLayout=tileType[][]
 import { useSocket } from '../socket.connection/SocketContext';
 import React, { useState } from 'react';
-import { Socket } from 'socket.io-client';
+
 interface Tilemap{
   [key:number]:string;
 }
@@ -54,8 +54,6 @@ export const classroomLayout: ClassroomLayout = [
 ];
 interface User{
         id : string,
-        userid:string,
-        spceID:string,
         nickname:string,
         x:number,
         y:number,
@@ -74,14 +72,8 @@ interface myloc{
 
 
 const MetaCanvas: React.FC = () => {
-        const {socket,isconnected} = useSocket()
-
-
+        const {socket,data1} = useSocket()
         const [users,setusers]=useState<User[]>([])
-        const [mylocation, setmylocation] = useState<myloc>({
-            x:200,
-            y:200
-        })
         const {nickname}=useAuth()
         const handleonjoined=React.useCallback((data:joinedsata)=>{
             const {x,y,users} = data
@@ -89,13 +81,86 @@ const MetaCanvas: React.FC = () => {
 
             localStorage.setItem('users',JSON.stringify(users))
             setusers((prev) => [...prev, ...users]);
-            setmylocation({x:x,y:y})
+
         },[])
 
         React.useEffect(()=>{
             if(!socket) return
+
             socket.on('spacejoined',handleonjoined)
-        },[handleonjoined,socket])
+            if(data1){
+                const {x,y,users}= data1
+                  console.log(x,y,users)
+                // console.log(users,x,y)
+                localStorage.setItem('users',JSON.stringify(users))
+                setusers((prev) => [...prev, ...users]);
+
+            }
+        },[handleonjoined,socket,data1])
+
+
+
+        ///// charecter movements and logic
+        const [position, setPosition] = useState<myloc>({x:100,y:100});
+        const [direction, setDirection] = useState<'up' | 'down' | 'left' | 'right'>('down');
+        const [isMoving, setMoving] = useState<boolean>(false);
+        const notsolid=(x:number , y:number)=>{
+            const row = Math.floor(y/TILE_SIZE)
+            const col= Math.floor(x/TILE_SIZE)
+            if(row>=0&&row<classroomLayout.length && col>=0&&col<classroomLayout[0].length){
+              const tile = classroomLayout[row][col]
+                return tile===1||tile===2||tile===7||tile===5
+              }
+           return false
+    }
+        React.useEffect(()=>{
+            const handleKeyDown=(e:KeyboardEvent)=>{
+                e.preventDefault()
+                setMoving(true)
+                const speed=5
+                let newpositon = {...position}
+                switch (e.key){
+                    case 'ArrowUp':
+                    case 'w':
+                    setDirection('up');
+                    newpositon={x:position.x, y: position.y - speed}
+
+                    break;
+                    case 'ArrowDown':
+                    case 's':
+                    setDirection('down');
+                    newpositon={x:position.x,y:position.y+speed}
+                    break;
+                    case 'ArrowLeft':
+                    case 'a':
+                    setDirection('left');
+                    newpositon = { x: position.x - speed, y: position.y };
+                    break;
+                    case 'ArrowRight':
+                    case 'd':
+                    setDirection('right');
+                    newpositon = { x: position.x + speed, y: position.y };
+                    break;
+                  default:
+                    break
+                  }
+                  if(!notsolid(newpositon.x,newpositon.y)){
+                    setPosition(newpositon)
+              }
+                }
+                const handleKeyUp = () => {
+                    setMoving(false);
+                  };
+
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+
+        return () => {
+          window.removeEventListener('keydown', handleKeyDown);
+          window.removeEventListener('keyup', handleKeyUp);
+        };
+
+        })
 
 
         return (
@@ -122,15 +187,14 @@ const MetaCanvas: React.FC = () => {
                   {
                     users.map((e)=>(
                         <Charecter
-                        key={e.id}
-                        initialPosition={{x:e.x,y:e.y}}
-                        name={nickname}
+                        key={e.id+Math.random()}
+                        position={{ x: e.x, y: e.y }} name={nickname} direction={direction} isMoving={isMoving}
                         />
 
                     ))
                   }
 
-            <Charecter initialPosition={{ x: mylocation.x, y: mylocation.y }} name={nickname} />
+            <Charecter position={{ x: position.x, y: position.y }} name={nickname} direction={direction} isMoving={isMoving} />
             </Container>
           </Stage>
 

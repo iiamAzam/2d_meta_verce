@@ -46,10 +46,9 @@ const SECRET_KEY = "ok_this_working1234";
                 switch (type) {
                     case 'join':
                         try {
-                            const userId = jwt.verify(token, SECRET_KEY) as JwtPayload|{_id:string}
-                            this.userid = userId._id;
-                            console.log(userId)
-
+                            const userId = jwt.verify(token, SECRET_KEY) as JwtPayload|{_doc:{_id:string}}
+                            this.userid = userId._doc._id;
+                            console.log(spacId)
                             const space = await spaceModel.findOne({ spacId });
                             console.log(space)
                             if (!space) {
