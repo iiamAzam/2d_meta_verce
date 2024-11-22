@@ -34,6 +34,7 @@ class User {
     this.x = 0
     this.y = 0
     this.socket = socket
+
     this.initHandler()
   }
 
@@ -48,7 +49,7 @@ class User {
                 | JwtPayload
                 | { _doc: { _id: string } }
               this.userid = userId._doc._id
-
+              console.log(this.userid)
               const space = await spaceModel.findOne({ name: 'Test Space' })
               if (!space) {
                 console.log('id problem')
